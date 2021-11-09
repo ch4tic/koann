@@ -15,5 +15,5 @@ def main():
     grayscale_slika = cv2.cvtColor(slika, cv2.COLOR_BGR2GRAY)
     cv2.imshow('Grayscale', grayscale_slika)
     cv2.waitKey(0)
-
+    cv2.destroyAllWindows()
 main()
