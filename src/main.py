@@ -11,8 +11,6 @@ def main():
 
     slika = cv2.imread('receipt.jpg', cv2.IMREAD_COLOR)
     #cv2.imshow('Original', slika)
-    grayscale_slika = cv2.cvtColor(slika, cv2.COLOR_BGR2GRAY)
-    cv2.imshow('Grayscale', grayscale_slika)
     tekst = pytesseract.image_to_string(slika, config=config)
     print(tekst)
 
