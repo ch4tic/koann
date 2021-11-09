@@ -5,12 +5,9 @@ import sys
 import cv2
 
 def main():
-    #putanja = input("Unesi putanju do slike: ")
-    #while putanja == "":
-    #    putanja = input("Unesi putanju do slike: ")
     config = ('-l eng --oem 1 --psm 3')
     slika = cv2.imread('biologija.jpg', cv2.IMREAD_COLOR)
-    #cv2.imshow('Original', slika)
+
     tekst = pytesseract.image_to_string(slika, config=config)
     print(tekst)
 
