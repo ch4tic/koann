@@ -1,9 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import time
+import pytesseract
 import sys
 import cv2
-import os
 
 def main():
     #putanja = input("Unesi putanju do slike: ")
@@ -16,4 +15,6 @@ def main():
     cv2.imshow('Grayscale', grayscale_slika)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-main()
+
+if __name__ == "__main__":
+    main()
