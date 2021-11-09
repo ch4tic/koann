@@ -5,13 +5,14 @@ import sys
 import os
 
 def main():
-    putanja = input("Unesi putanju do slike: ")
-    while putanja == "":
-        putanja = input("Unesi putanju do slike: ")
+    #putanja = input("Unesi putanju do slike: ")
+    #while putanja == "":
+    #    putanja = input("Unesi putanju do slike: ")
 
-    slika = open(putanja, 'r')
-    plt.imshow(putanja)
-    plt.show()
+    slika = cv2.imread('test.jpg')
+    #cv2.imshow('Original', slika)
+    grayscale_slika = cv2.cvtColor(slika, cv2.COLOR_BGR2GRAY)
+    cv2.imshow('Grayscale', grayscale_slika)
 
 
 main()
