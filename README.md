@@ -1,3 +1,3 @@
 # Obala Projekat 1 
 
-- Text recognition goes brr
+Text recognition goes brr
