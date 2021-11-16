@@ -1,3 +1,3 @@
-# Obala Projekat 1 
+# project koann!
 
 Text recognition goes brr
