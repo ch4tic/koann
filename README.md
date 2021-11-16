@@ -1,3 +1,3 @@
 # project koann!
 
-Text recognition goes brr
+Text recognition goes brr.
