@@ -4,6 +4,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pytesseract
+import shutil 
+import time 
 import sys
 import cv2
 import os
@@ -14,6 +16,7 @@ def main():
     if len(sys.argv) < 2:
         print("sintaksa: python3 main.py ../img/ ime_slike")
         sys.exit(1)
+    timestr = time.strftime("%Y%m%d-%H%M%S")
 
     putanja = sys.argv[1]
     os.chdir(putanja)
@@ -27,9 +30,17 @@ def main():
     cv2.threshold(cv2.medianBlur(slika, 3), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     cv2.adaptiveThreshold(cv2.medianBlur(slika, 3), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 2)
     
+    fputanja = putanja+ime_slike
     slika = cv2.imread(putanja+ime_slike, cv2.COLOR_BGR2GRAY)
     tekst = pytesseract.image_to_string(slika, config=config)
-    print(tekst)
-
+    # print(tekst)
+    os.chdir("../arhiva/")
+    os.mkdir(timestr)
+    filename = "output.txt"
+    file = open(filename, "w+")
+    file.write(tekst)
+    file.close()
+    shutil.move("output.txt", timestr)
+    shutil.move(fputanja, timestr)
 if __name__ == "__main__":
     main()
