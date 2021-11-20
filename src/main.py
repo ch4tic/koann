@@ -12,22 +12,58 @@ import cv2
 import os
 from PIL import Image, ImageEnhance
 
+def clear(): 
+    os.system("clear")
+
 def main(): 
     # -- KONFIGURACIJA -- 
     config = ('-l bos --oem 1 --psm 3')
-    if len(sys.argv) < 2:
-        print("sintaksa: python3 main.py ../img/ ime_slike")
-        sys.exit(1) 
-
+    
     # -- VARIJABLE -- 
     filename = "output.txt" # ime output file-a
-    timestr = time.strftime("%Y%m%d-%H%M%S") # format imena foldera
-    # postavljanje putanje i imena slike
-    putanja = sys.argv[1] 
-    ime_slike = sys.argv[2]
-    os.chdir(putanja) # promjena foldera u unesenu putanju
-    fputanja = putanja+ime_slike
+    komande = ["exit", "tree", "delete", "process"]
+    timestr = time.strftime("%Y%m%d%H%M") 
+    putanja = "../img/"
+    clear() 
 
+    # -- KOMANDE -- 
+    print("Komande: ")
+    for x in komande:
+        print(x)
+    print('\n')
+
+    komanda = input("Unesite komandu: ") 
+    while komanda == "": 
+        komanda = input("Unesite komandu: ")
+
+    if komanda == "exit":   
+        clear()
+        sys.exit()
+    elif komanda == "tree":
+        clear()
+        os.system("cd .. && cd arhiva/ && tree")
+        sys.exit()
+    elif komanda == "delete": 
+        clear() 
+        os.system("cd .. && cd arhiva/ && tree")
+        ftd = input("Ime foldera koji želite ukloniti: ")
+        while ftd == "":
+            ftd = input("Ime foldera koji želite ukloniti: ")
+        os.chdir("../arhiva/")
+        shutil.rmtree(ftd)
+        print("Folder uspješno uklonjen!")
+        time.sleep(1)
+        clear()
+        sys.exit()
+    elif komanda == "process": 
+        clear()
+        os.chdir(putanja)
+        ime_slike = input("Unesite ime slike: ")
+        while ime_slike == "": 
+            ime_slike = input("Unesite ime slike: ")
+
+    fputanja = putanja+ime_slike 
+        
     # -- IMAGE PROCESSING -- 
     slika = cv2.imread(fputanja) # ucitavanje slike
     # skaliranje slike
@@ -56,7 +92,7 @@ def main():
     file.close() # zatvaranje filea
     # premjestanje koristene slike i output filea u novi folder
     shutil.move(filename, timestr)
-    shutil.move(fputanja, timestr)
+    os.system("cp " + fputanja + " " + timestr)
 
 if __name__ == "__main__":
     main()
