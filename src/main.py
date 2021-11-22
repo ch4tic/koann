@@ -1,6 +1,5 @@
-# Authori: Eman Ćatić i Rijad Gadžo
-# Datum: -
-# TODO:  
+# Authors: Eman Ćatić i Rijad Gadžo
+# Date: 22.11.1337
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -16,87 +15,91 @@ from PIL import Image, ImageEnhance
 def clear(): 
     os.system("clear")
 
-def procesovanje(filename, putanja, timestr, ime_slike, config):
-    fputanja = putanja+ime_slike 
+def imageProcessing(filename, path, timestr, image_name, config):
+    fpath = path + image_name  
         
-    # -- PROCESUIRANJE SLIKA -- 
-    slika = cv2.imread(fputanja) # ucitavanje slike
-    # skaliranje slike
-    slika = cv2.resize(slika, None, fx=1.5, fy=1.5, interpolation=cv2.INTER_CUBIC) 
-    # pretvaranje slike u grayscale
-    slika = cv2.cvtColor(slika, cv2.COLOR_BGR2GRAY) 
+    # -- IMAGE PROCESSING -- 
+    image = cv2.imread(fpath) # image load 
+    # image scaling to 300 DPI
+    image = cv2.resize(image, None, fx=1.5, fy=1.5, interpolation=cv2.INTER_CUBIC) 
+    # image convert to grayscale
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) 
 
-    # blurrovanje slika 
+    # blurring the image using median blur method 
     kernel = np.ones((1, 1), np.uint8)
-    slika = cv2.dilate(slika, kernel, iterations=1)
-    slika = cv2.erode(slika, kernel, iterations=1)
-    cv2.threshold(cv2.medianBlur(slika, 3), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-    cv2.adaptiveThreshold(cv2.medianBlur(slika, 3), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 2)
+    image = cv2.dilate(image, kernel, iterations=1)
+    image = cv2.erode(image, kernel, iterations=1)
+    cv2.threshold(cv2.medianBlur(image, 3), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    cv2.adaptiveThreshold(cv2.medianBlur(image, 3), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 2)
     
-    # ucitavanje poboljsane slike 
-    slika = cv2.imread(fputanja, cv2.COLOR_BGR2GRAY) 
-    # detekcija teksta iz slike i ispisivanje istog
-    tekst = pytesseract.image_to_string(slika, config=config)
-    print(tekst)
+    # loading the processed image 
+    image = cv2.imread(fpath, cv2.COLOR_BGR2GRAY) 
+    # finally using tesseract to recognize text from image
+    text = pytesseract.image_to_string(image, config=config)
+    print(text) # output the text
 
-    # -- FILE ORGANIZACIJA --
+    # -- FILE ORGANISATION --
+
+    # if changing directory to '/archive' fails, create that directory
     try:
-        os.chdir("../arhiva/") # promjena foldera u '/arhiva/'
+        os.chdir("../archive/")
     except:
-        os.chdir("../")
-        os.mkdir("arhiva")
-        os.chdir("arhiva/")
-        os.mkdir(timestr) # pravljenje novog foldera
-    file = open(filename, "w+") # pravljenje output filea
-    file.write(tekst) # ispisivanje detektovanog teksta u file
-    file.close() # zatvaranje filea
-    # premjestanje koristene slike i output filea u novi folder
-    shutil.move(filename, timestr)
-    os.system("cp " + fputanja + " " + timestr)
+        os.chdir("../") 
+        os.mkdir("archive")
+        os.chdir("archive/")
+        os.mkdir(timestr) 
 
-def komandeIprocesovanje(filename, timestr, putanja):
-    print("Komande: exit, tree, delete, delete all, process")
-    komanda = input("Unesite komandu: ") 
-    while komanda == "": 
-        komanda = input("Unesite komandu: ")
-    if komanda == "exit":   
+    file = open(filename, "w+") # making the text output file
+    file.write(text) # writing detected text into output file 
+    file.close() # closing the file 
+    # moving the ouptut file to folder created earlier 
+    shutil.move(filename, timestr) 
+    # copying image used into that folder 
+    os.system("cp " + fpath + " " + timestr) 
+
+def commands(filename, timestr, path):
+    print("Commands: exit, tree, delete, delete all, process.")
+
+    command = input("Enter command: ") 
+    while command == "": 
+        command = input("Enter command: ")
+    if command == "exit":   
         clear()
         sys.exit()
-    elif komanda == "tree":
+    elif command == "tree":
         clear()
-        os.system("cd .. && cd arhiva/ && tree")
-    elif komanda == "delete": 
+        os.system("cd .. && cd archive/ && tree")
+    elif command == "delete": 
         clear() 
-        os.system("cd ../arhiva/ && tree") 
-        ftd = input("Ime foldera koji želite ukloniti: ") 
+        os.system("cd ../archive/ && tree") 
+        ftd = input("Name of folder to remove: ") 
         while ftd == "":
-            ftd = input("Ime foldera koji želite ukloniti: ")
-        os.chdir("../arhiva/") 
-        shutil.rmtree(ftd) # brisanje foldera
-        print("Folder uspješno uklonjen!")
-        time.sleep(1) # delay 1. sekunda
-    elif komanda == "delete all": 
+            ftd = input("Name of folder to remove: ")
+        os.chdir("../archive/") 
+        shutil.rmtree(ftd) # folder delete 
+        print("Folder removed succesfully!")
+    elif command == "delete all": 
         clear()
-        shutil.rmtree("../arhiva/")
-        print("Svi folderi su uspješno uklonjeni!")
-    elif komanda == "process": 
+        shutil.rmtree("../archive") # deleting all files including the folder
+        print("All folders/files succesfully removed!")
+    elif command == "process": 
         clear()
-        os.chdir(putanja) # promjena foldera u putanju("../img/")
-        jezik = input("Unesite jezik od ponuđenih: ")
-        config = ('-l ' + jezik + ' --oem 1 --psm 3') # config za tesseract
-        ime_slike = input("Unesite ime slike: ") # unos imena slike
-        while ime_slike == "": 
-            ime_slike = input("Unesite ime slike: ")
-        procesovanje(filename, putanja, timestr, ime_slike, config)
+        os.chdir(path) 
+        lang = input("Enter desired language(bos, srp, hrv, eng, deu, fra): ")
+        config = ('-l ' + lang + ' --oem 1 --psm 3') # config for tesseract
+        image_name = input("Enter image name: ") 
+        while image_name == "": 
+            image_name = input("Enter image name: ")
+        imageProcessing(filename, path, timestr, image_name, config)
 
 def main(): 
     # -- VARIJABLE -- 
-    filename = "output.txt" # ime output file-a
-    timestr = time.strftime("%Y%m%d%H%M%s") # format imena foldera
-    putanja = "../img/" # putanja do slika
+    filename = "output.txt" # name of output file 
+    timestr = time.strftime("%Y%m%d%H%M%S") # folder name format
+    path = "../img/" # path to images folder 
     clear() 
     while True:
-        komandeIprocesovanje(filename, timestr, putanja)
+        commands(filename, timestr, path) # calling the commands() function
 
 if __name__ == "__main__":
     main()
