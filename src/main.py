@@ -15,54 +15,7 @@ from PIL import Image, ImageEnhance
 def clear(): 
     os.system("clear")
 
-def main(): 
-    # -- KONFIGURACIJA -- 
-    config = ('-l bos --oem 1 --psm 3')
-    
-    # -- VARIJABLE -- 
-    filename = "output.txt" # ime output file-a
-    komande = ["exit", "tree", "delete", "process"]
-    timestr = time.strftime("%Y%m%d%H%M") 
-    putanja = "../img/"
-    clear() 
-
-    # -- KOMANDE -- 
-    while True:
-        print("Komande: ")
-        for x in komande:
-            print(x)
-        print('\n')
-
-        komanda = input("Unesite komandu: ") 
-        while komanda == "": 
-            komanda = input("Unesite komandu: ")
-
-        if komanda == "exit":   
-            clear()
-            sys.exit()
-        elif komanda == "tree":
-            clear()
-            os.system("cd .. && cd arhiva/ && tree")
-            sys.exit()
-        elif komanda == "delete": 
-            clear() 
-            os.system("cd .. && cd arhiva/ && tree")
-            ftd = input("Ime foldera koji želite ukloniti: ")
-            while ftd == "":
-                ftd = input("Ime foldera koji želite ukloniti: ")
-            os.chdir("../arhiva/")
-            shutil.rmtree(ftd)
-            print("Folder uspješno uklonjen!")
-            time.sleep(1)
-            clear()
-            sys.exit()
-        elif komanda == "process": 
-            clear()
-            os.chdir(putanja)
-            ime_slike = input("Unesite ime slike: ")
-            while ime_slike == "": 
-                ime_slike = input("Unesite ime slike: ")
-
+def procesovanje(filename, putanja, timestr, ime_slike, config):
     fputanja = putanja+ime_slike 
         
     # -- IMAGE PROCESSING -- 
@@ -94,6 +47,58 @@ def main():
     # premjestanje koristene slike i output filea u novi folder
     shutil.move(filename, timestr)
     os.system("cp " + fputanja + " " + timestr)
+
+
+def komandeIprocesovanje(komande, filename, timestr, putanja, config):
+    print("Komande: ")
+    for x in komande:
+        print(x)
+    print('\n')
+
+    komanda = input("Unesite komandu: ") 
+    while komanda == "": 
+        komanda = input("Unesite komandu: ")
+
+    if komanda == "exit":   
+        clear()
+        sys.exit()
+    elif komanda == "tree":
+        clear()
+        os.system("cd .. && cd arhiva/ && tree")
+    elif komanda == "delete": 
+        clear() 
+        os.system("cd .. && cd arhiva/ && tree")
+        ftd = input("Ime foldera koji želite ukloniti: ")
+        while ftd == "":
+            ftd = input("Ime foldera koji želite ukloniti: ")
+        os.chdir("../arhiva/")
+        shutil.rmtree(ftd)
+        print("Folder uspješno uklonjen!")
+        time.sleep(1)
+    elif komanda == "process": 
+        clear()
+        os.chdir(putanja)
+        ime_slike = input("Unesite ime slike: ")
+        while ime_slike == "": 
+            ime_slike = input("Unesite ime slike: ")
+        procesovanje(filename, putanja, timestr, ime_slike, config)
+
+def main(): 
+    # -- KONFIGURACIJA -- 
+    config = ('-l bos --oem 1 --psm 3')
+    
+    # -- VARIJABLE -- 
+    filename = "output.txt" # ime output file-a
+    komande = ["exit", "tree", "delete", "process"]
+    timestr = time.strftime("%Y%m%d%H%M") 
+    putanja = "../img/"
+    clear() 
+
+    while True:
+        komandeIprocesovanje(komande, filename, timestr, putanja, config)
+
+
+
 
 if __name__ == "__main__":
     main()
