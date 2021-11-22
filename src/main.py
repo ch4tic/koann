@@ -49,7 +49,7 @@ def procesovanje(filename, putanja, timestr, ime_slike, config):
     os.system("cp " + fputanja + " " + timestr)
 
 
-def komandeIprocesovanje(filename, timestr, putanja, config):
+def komandeIprocesovanje(filename, timestr, putanja:
     print("Komande: exit, tree, delete, process")
 
     komanda = input("Unesite komandu: ") 
@@ -75,6 +75,8 @@ def komandeIprocesovanje(filename, timestr, putanja, config):
     elif komanda == "process": 
         clear()
         os.chdir(putanja)
+        jezik = input("Unesite jezik od ponuđenih: ")
+        config = ('-l ' + jezik + ' --oem 1 --psm 3')
         ime_slike = input("Unesite ime slike: ")
         while ime_slike == "": 
             ime_slike = input("Unesite ime slike: ")
@@ -82,7 +84,7 @@ def komandeIprocesovanje(filename, timestr, putanja, config):
 
 def main(): 
     # -- KONFIGURACIJA -- 
-    config = ('-l bos --oem 1 --psm 3')
+    
     
     # -- VARIJABLE -- 
     filename = "output.txt" # ime output file-a
@@ -91,7 +93,7 @@ def main():
     clear() 
 
     while True:
-        komandeIprocesovanje(filename, timestr, putanja, config)
+        komandeIprocesovanje(filename, timestr, putanja)
 
 if __name__ == "__main__":
     main()
