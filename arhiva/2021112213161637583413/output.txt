@@ -1,0 +1,6 @@
+Slobodan -pad je kretanje koje nastane ako-se-tijelo-sa-neke
+Sisine pusti i nastavi se kretati samo pod uticajem Zemljine sile
+162e. To je jednakoubrzano kretanje bez početne brzine. Za
+slobodan pad vrijede obrasci kao za jednako ubrzano kretanje, s
+stim što put označimo sa h, a ubrzanje sa g.
+

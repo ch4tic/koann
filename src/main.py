@@ -1,4 +1,4 @@
-# Authori: Eman Ćatić i Rijad Gadžo
+# Authori: Eman Ćatić i Rijad Gadžo.
 # Datum: -
 # TODO:  
 
@@ -22,16 +22,12 @@ def main():
     # -- VARIJABLE -- 
     filename = "output.txt" # ime output file-a
     komande = ["exit", "tree", "delete", "process"]
-    timestr = time.strftime("%Y%m%d%H%M") 
+    timestr = time.strftime("%Y%m%d%H%M%s") 
     putanja = "../img/"
     clear() 
 
     # -- KOMANDE -- 
-    print("Komande: ")
-    for x in komande:
-        print(x)
-    print('\n')
-
+    print("Komande: exit, tree, delete, process.\n")
     komanda = input("Unesite komandu: ") 
     while komanda == "": 
         komanda = input("Unesite komandu: ")
