@@ -1,7 +1,0 @@
-"The answers below are really great, but as one that has worked with OCR | can tell you that the recognition
-gvuality in Tesseract is below the expectations of a commercial app user. Tesseract is great, but OCR is
-difficult - things like online training, or improvements on-the-fiy are hmmm... still research. Google, the big
-sponsor behind TS lately, has decided to build its own engine - OCROpus. And while it promised to
-opensource it, the core recognition engine is not yet available - they only published a framework - that's an
-api to tesseract. - sammy Jul 15 '12 at 7:08
-

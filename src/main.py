@@ -7,6 +7,7 @@ import numpy as np
 import pytesseract
 import shutil 
 import time 
+import glob
 import sys
 import cv2
 import os
@@ -18,7 +19,7 @@ def clear():
 def procesovanje(filename, putanja, timestr, ime_slike, config):
     fputanja = putanja+ime_slike 
         
-    # -- IMAGE PROCESSING -- 
+    # -- PROCESUIRANJE SLIKA -- 
     slika = cv2.imread(fputanja) # ucitavanje slike
     # skaliranje slike
     slika = cv2.resize(slika, None, fx=1.5, fy=1.5, interpolation=cv2.INTER_CUBIC) 
@@ -39,8 +40,13 @@ def procesovanje(filename, putanja, timestr, ime_slike, config):
     print(tekst)
 
     # -- FILE ORGANIZACIJA --
-    os.chdir("../arhiva/") # promjena foldera u '/arhiva/'
-    os.mkdir(timestr) # pravljenje novog foldera
+    try:
+        os.chdir("../arhiva/") # promjena foldera u '/arhiva/'
+    except:
+        os.chdir("../")
+        os.mkdir("arhiva")
+        os.chdir("arhiva/")
+        os.mkdir(timestr) # pravljenje novog foldera
     file = open(filename, "w+") # pravljenje output filea
     file.write(tekst) # ispisivanje detektovanog teksta u file
     file.close() # zatvaranje filea
@@ -48,9 +54,8 @@ def procesovanje(filename, putanja, timestr, ime_slike, config):
     shutil.move(filename, timestr)
     os.system("cp " + fputanja + " " + timestr)
 
-
 def komandeIprocesovanje(filename, timestr, putanja):
-    print("Komande: exit, tree, delete, process")
+    print("Komande: exit, tree, delete, delete all, process")
     komanda = input("Unesite komandu: ") 
     while komanda == "": 
         komanda = input("Unesite komandu: ")
@@ -62,20 +67,24 @@ def komandeIprocesovanje(filename, timestr, putanja):
         os.system("cd .. && cd arhiva/ && tree")
     elif komanda == "delete": 
         clear() 
-        os.system("cd .. && cd arhiva/ && tree")
-        ftd = input("Ime foldera koji želite ukloniti: ")
+        os.system("cd ../arhiva/ && tree") 
+        ftd = input("Ime foldera koji želite ukloniti: ") 
         while ftd == "":
             ftd = input("Ime foldera koji želite ukloniti: ")
-        os.chdir("../arhiva/")
-        shutil.rmtree(ftd)
+        os.chdir("../arhiva/") 
+        shutil.rmtree(ftd) # brisanje foldera
         print("Folder uspješno uklonjen!")
-        time.sleep(1)
+        time.sleep(1) # delay 1. sekunda
+    elif komanda == "delete all": 
+        clear()
+        shutil.rmtree("../arhiva/")
+        print("Svi folderi su uspješno uklonjeni!")
     elif komanda == "process": 
         clear()
-        os.chdir(putanja)
+        os.chdir(putanja) # promjena foldera u putanju("../img/")
         jezik = input("Unesite jezik od ponuđenih: ")
-        config = ('-l ' + jezik + ' --oem 1 --psm 3')
-        ime_slike = input("Unesite ime slike: ")
+        config = ('-l ' + jezik + ' --oem 1 --psm 3') # config za tesseract
+        ime_slike = input("Unesite ime slike: ") # unos imena slike
         while ime_slike == "": 
             ime_slike = input("Unesite ime slike: ")
         procesovanje(filename, putanja, timestr, ime_slike, config)
@@ -83,10 +92,9 @@ def komandeIprocesovanje(filename, timestr, putanja):
 def main(): 
     # -- VARIJABLE -- 
     filename = "output.txt" # ime output file-a
-    timestr = time.strftime("%Y%m%d%H%M%s") 
-    putanja = "../img/"
+    timestr = time.strftime("%Y%m%d%H%M%s") # format imena foldera
+    putanja = "../img/" # putanja do slika
     clear() 
-
     while True:
         komandeIprocesovanje(filename, timestr, putanja)
 
