@@ -50,10 +50,7 @@ def procesovanje(filename, putanja, timestr, ime_slike, config):
 
 
 def komandeIprocesovanje(komande, filename, timestr, putanja, config):
-    print("Komande: ")
-    for x in komande:
-        print(x)
-    print('\n')
+    print("Komande: exit, tree, delete, process")
 
     komanda = input("Unesite komandu: ") 
     while komanda == "": 
