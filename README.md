@@ -8,7 +8,9 @@ Text recognition algorithm implementation using Tesseract.
 4. Use pip to install all modules required (go into koann/src/ and run pip install -r requirements.txt).
 5. Run the program: ***python3 main.py***
 
-**Note that you should have the tree command installed on your preffered OS.**
+**Note that you should have the tree command installed on your preffered OS.** 
+
+**You also have some languages we've added in "/lang/" folder**
 
 Syntax for Linux: ***apt-get install tree && pacman -S tree*** 
 
