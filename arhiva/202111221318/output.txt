@@ -1,0 +1,8 @@
+Vertikalan-hitac-na dolje kretanje je koje nastaje
+ako se tijelo sa neke visine baci_Vertikalno-prema
+dolje početnom brzinom vo i nastavi kretati samo pod
+uticajem Zemljine sile teže. To je jednakoubrzano
+kretanje s početnom brzinom. Jednačine. kretanja.
+analogne su jednačinama jednakoubrzanog pravoli-
+nijskog kretanja s početnom brzinom.
+

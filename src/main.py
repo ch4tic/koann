@@ -1,4 +1,4 @@
-# Authori: Eman Ćatić i Rijad Gadžo.
+# Authori: Eman Ćatić i Rijad Gadžo
 # Datum: -
 # TODO:  
 
@@ -22,41 +22,46 @@ def main():
     # -- VARIJABLE -- 
     filename = "output.txt" # ime output file-a
     komande = ["exit", "tree", "delete", "process"]
-    timestr = time.strftime("%Y%m%d%H%M%s") 
+    timestr = time.strftime("%Y%m%d%H%M") 
     putanja = "../img/"
     clear() 
 
     # -- KOMANDE -- 
-    print("Komande: exit, tree, delete, process.\n")
-    komanda = input("Unesite komandu: ") 
-    while komanda == "": 
-        komanda = input("Unesite komandu: ")
+    while True:
+        print("Komande: ")
+        for x in komande:
+            print(x)
+        print('\n')
 
-    if komanda == "exit":   
-        clear()
-        sys.exit()
-    elif komanda == "tree":
-        clear()
-        os.system("cd .. && cd arhiva/ && tree")
-        sys.exit()
-    elif komanda == "delete": 
-        clear() 
-        os.system("cd .. && cd arhiva/ && tree")
-        ftd = input("Ime foldera koji želite ukloniti: ")
-        while ftd == "":
+        komanda = input("Unesite komandu: ") 
+        while komanda == "": 
+            komanda = input("Unesite komandu: ")
+
+        if komanda == "exit":   
+            clear()
+            sys.exit()
+        elif komanda == "tree":
+            clear()
+            os.system("cd .. && cd arhiva/ && tree")
+            sys.exit()
+        elif komanda == "delete": 
+            clear() 
+            os.system("cd .. && cd arhiva/ && tree")
             ftd = input("Ime foldera koji želite ukloniti: ")
-        os.chdir("../arhiva/")
-        shutil.rmtree(ftd)
-        print("Folder uspješno uklonjen!")
-        time.sleep(1)
-        clear()
-        sys.exit()
-    elif komanda == "process": 
-        clear()
-        os.chdir(putanja)
-        ime_slike = input("Unesite ime slike: ")
-        while ime_slike == "": 
+            while ftd == "":
+                ftd = input("Ime foldera koji želite ukloniti: ")
+            os.chdir("../arhiva/")
+            shutil.rmtree(ftd)
+            print("Folder uspješno uklonjen!")
+            time.sleep(1)
+            clear()
+            sys.exit()
+        elif komanda == "process": 
+            clear()
+            os.chdir(putanja)
             ime_slike = input("Unesite ime slike: ")
+            while ime_slike == "": 
+                ime_slike = input("Unesite ime slike: ")
 
     fputanja = putanja+ime_slike 
         
