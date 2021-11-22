@@ -49,7 +49,7 @@ def procesovanje(filename, putanja, timestr, ime_slike, config):
     os.system("cp " + fputanja + " " + timestr)
 
 
-def komandeIprocesovanje(komande, filename, timestr, putanja, config):
+def komandeIprocesovanje(filename, timestr, putanja, config):
     print("Komande: exit, tree, delete, process")
 
     komanda = input("Unesite komandu: ") 
@@ -86,16 +86,12 @@ def main():
     
     # -- VARIJABLE -- 
     filename = "output.txt" # ime output file-a
-    komande = ["exit", "tree", "delete", "process"]
-    timestr = time.strftime("%Y%m%d%H%M") 
+    timestr = time.strftime("%Y%m%d%H%M%s") 
     putanja = "../img/"
     clear() 
 
     while True:
-        komandeIprocesovanje(komande, filename, timestr, putanja, config)
-
-
-
+        komandeIprocesovanje(filename, timestr, putanja, config)
 
 if __name__ == "__main__":
     main()
