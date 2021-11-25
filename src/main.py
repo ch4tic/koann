@@ -21,7 +21,6 @@ def GoogleDriveUpload(path2, timestr):
     gauth = GoogleAuth()
     gauth.LocalWebserverAuth()
     drive = GoogleDrive(gauth)
-    file_metadata
     for x in os.listdir(path2):
         f = drive.CreateFile({timestr: x})
         f.SetContentFile(os.path.join(path2, x))
