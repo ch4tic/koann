@@ -12,9 +12,13 @@ Text recognition algorithm implementation using Tesseract.
 
 **You also have some languages we've added in "/lang/" folder**
 
-Syntax for Linux: ***apt-get install tree && pacman -S tree*** 
+Syntax for Linux Arch(btw I use Arch): ```pacman -S tree``` 
 
-Syntax for MacOS: ***brew install tree***
+Syntax for Linux Debian: ```apt-get install tree```
+
+Syntax for OS X: ```brew install tree```
+
+For Windows ```tree``` is ***already there***
 
 If you feel like you can make a good contribution to the code, feel free to do so :) 
 
