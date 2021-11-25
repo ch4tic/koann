@@ -18,7 +18,7 @@ Syntax for Linux Debian: ```apt-get install tree```
 
 Syntax for OS X: ```brew install tree```
 
-For Windows ```tree``` is ***already there***
+For Windows ```tree``` is ***already installed***
 
 If you feel like you can make a good contribution to the code, feel free to do so :) 
 
