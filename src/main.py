@@ -15,21 +15,24 @@ from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
 
 def clear(): 
-    os.system("cls")
+    os.system("clear")
 
-def GoogleDriveUpload(path, timestr): 
+def GoogleDriveUpload(path2, timestr): 
     gauth = GoogleAuth()
-    """gauth.LocalWebserverAuth()
+    gauth.LocalWebserverAuth()
     drive = GoogleDrive(gauth)
-    for x in os.listdir(path2):
-        f = drive.CreateFile({timestr: x})
-        f.SetContentFile(os.path.join(path2, x))
-        f.Upload()
-        f = None"""
-    drive = GoogleDrive(gauth)
-    folder = drive.CreateFile({'title': timestr, 'mimeType':'application/vnd.google-apps.folder'})
+    foldername = os.walk("../archive/").__next__()
+    folder = drive.CreateFile({'title': foldername, 'mimeType':'application/vnd.google-apps.folder'})
     folder.Upload()
-    
+    cfolder_id = folder['id']
+    os.chdir(path2)
+    for file in glob.glob(""):
+        with open(file, "r") as f: 
+            fn = os.path.basename(f.name)
+            file_drive = drive.CreateFile({'title':fn})    
+        file_drive.SetContentString(f.read())
+        file_drive.Upload()
+
 def imageProcessing(filename, path, timestr, image_name, config):
     fpath = path + image_name  
         
@@ -72,7 +75,7 @@ def imageProcessing(filename, path, timestr, image_name, config):
     # copying image used into that folder 
     os.system("cp " + fpath + " " + timestr) 
 
-def commands(filename, timestr, path):
+def commands(filename, timestr, path, path2):
     print("Commands: exit, tree, drive upload, delete, delete all, process.")
 
     command = input("Enter command: ") 
@@ -87,7 +90,7 @@ def commands(filename, timestr, path):
         os.system("cd .. && cd archive/ && tree")
     elif command == "drive upload": 
         clear()
-        GoogleDriveUpload(path, timestr) 
+        GoogleDriveUpload(path2, timestr) 
     elif command == "delete": 
         clear() 
         os.system("cd ../archive/ && tree") 
@@ -116,9 +119,10 @@ def main():
     filename = "output.txt" # name of output file 
     timestr = time.strftime("%Y%m%d%H%M%S") # folder name format
     path = "../img/" # path to images folder 
+    path2 = "../archive/"
     clear() 
     while True:
-        commands(filename, timestr, path) # calling the commands() function
+        commands(filename, timestr, path, path2) # calling the commands() function
 
 if __name__ == "__main__":
     main()
