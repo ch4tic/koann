@@ -11,10 +11,22 @@ import sys
 import cv2
 import os
 from PIL import Image, ImageEnhance
+from pydrive.drive import GoogleDrive
+from pydrive.auth import GoogleAuth
 
 def clear(): 
     os.system("clear")
 
+def GoogleDriveUpload(path, image_name): 
+    gauth = GoogleAuth()
+    gauth.LocalWebserverAuth()
+    drive = GoogleDrive(gauth)
+    for x in os.listdir(putanja):
+        f = drive.CreateFile({putanja: x})
+        f.SetContentFile(os.path.join(putanja, x))
+        f.Upload()
+        f = None
+    
 def imageProcessing(filename, path, timestr, image_name, config):
     fpath = path + image_name  
         
@@ -58,17 +70,21 @@ def imageProcessing(filename, path, timestr, image_name, config):
     os.system("cp " + fpath + " " + timestr) 
 
 def commands(filename, timestr, path):
-    print("Commands: exit, tree, delete, delete all, process.")
+    print("Commands: exit, tree, drive upload, delete, delete all, process.")
 
     command = input("Enter command: ") 
     while command == "": 
         command = input("Enter command: ")
+    
     if command == "exit":   
         clear()
         sys.exit()
     elif command == "tree":
         clear()
         os.system("cd .. && cd archive/ && tree")
+    elif command == "drive upload": 
+        clear()
+        GoogleDriveUpload(path, timestr) 
     elif command == "delete": 
         clear() 
         os.system("cd ../archive/ && tree") 
