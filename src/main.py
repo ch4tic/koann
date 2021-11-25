@@ -17,15 +17,18 @@ from pydrive.auth import GoogleAuth
 def clear(): 
     os.system("cls")
 
-def GoogleDriveUpload(path2, timestr): 
+def GoogleDriveUpload(path, timestr): 
     gauth = GoogleAuth()
-    gauth.LocalWebserverAuth()
+    """gauth.LocalWebserverAuth()
     drive = GoogleDrive(gauth)
     for x in os.listdir(path2):
         f = drive.CreateFile({timestr: x})
         f.SetContentFile(os.path.join(path2, x))
         f.Upload()
-        f = None
+        f = None"""
+    drive = GoogleDrive(gauth)
+    folder = drive.CreateFile({'title': timestr, 'mimeType':'application/vnd.google-apps.folder'})
+    folder.Upload()
     
 def imageProcessing(filename, path, timestr, image_name, config):
     fpath = path + image_name  
@@ -69,7 +72,7 @@ def imageProcessing(filename, path, timestr, image_name, config):
     # copying image used into that folder 
     os.system("cp " + fpath + " " + timestr) 
 
-def commands(filename, timestr, path, path2):
+def commands(filename, timestr, path):
     print("Commands: exit, tree, drive upload, delete, delete all, process.")
 
     command = input("Enter command: ") 
@@ -84,7 +87,7 @@ def commands(filename, timestr, path, path2):
         os.system("cd .. && cd archive/ && tree")
     elif command == "drive upload": 
         clear()
-        GoogleDriveUpload(path2, timestr) 
+        GoogleDriveUpload(path, timestr) 
     elif command == "delete": 
         clear() 
         os.system("cd ../archive/ && tree") 
@@ -113,10 +116,9 @@ def main():
     filename = "output.txt" # name of output file 
     timestr = time.strftime("%Y%m%d%H%M%S") # folder name format
     path = "../img/" # path to images folder 
-    path2 = "../archive/" # path to archive folder
     clear() 
     while True:
-        commands(filename, timestr, path, path2) # calling the commands() function
+        commands(filename, timestr, path) # calling the commands() function
 
 if __name__ == "__main__":
     main()
