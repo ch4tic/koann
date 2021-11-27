@@ -17,16 +17,23 @@ from pydrive.auth import GoogleAuth
 def clear(): 
     os.system("clear")
 
-def GoogleDriveUpload(path, image_name): 
+def GoogleDriveUpload(path2, timestr):
     gauth = GoogleAuth()
     gauth.LocalWebserverAuth()
     drive = GoogleDrive(gauth)
-    for x in os.listdir(putanja):
-        f = drive.CreateFile({putanja: x})
-        f.SetContentFile(os.path.join(putanja, x))
-        f.Upload()
-        f = None
-    
+    directory = os.listdir(r"../archive/")
+    for foldername in directory: 
+        folder = drive.CreateFile({'title': foldername, 'mimeType':'application/vnd.google-apps.folder'})
+        folder.Upload()
+        cfolder_id = folder['id']
+        os.chdir(path2)
+        for file in glob.glob("*.png"):
+            with open(file, "r") as f: 
+                fn = os.path.basename(f.name)
+                file_drive = drive.CreateFile({'title':fn})    
+            file_drive.SetContentString(f.read())
+            file_drive.Upload()
+
 def imageProcessing(filename, path, timestr, image_name, config):
     fpath = path + image_name  
         
@@ -53,13 +60,8 @@ def imageProcessing(filename, path, timestr, image_name, config):
     # -- FILE ORGANISATION --
 
     # if changing directory to '/archive' fails, create that directory
-    try:
-        os.chdir("../archive/")
-    except:
-        os.chdir("../") 
-        os.mkdir("archive")
-        os.chdir("archive/")
-        os.mkdir(timestr) 
+    os.chdir("../archive/")
+    os.mkdir(timestr) 
 
     file = open(filename, "w+") # making the text output file
     file.write(text) # writing detected text into output file 
@@ -67,9 +69,9 @@ def imageProcessing(filename, path, timestr, image_name, config):
     # moving the ouptut file to folder created earlier 
     shutil.move(filename, timestr) 
     # copying image used into that folder 
-    os.system("cp " + fpath + " " + timestr) 
+    os.system("cp " + fpath + " " + timestr + "/") 
 
-def commands(filename, timestr, path):
+def commands(filename, timestr, path, path2):
     print("Commands: exit, tree, drive upload, delete, delete all, process.")
 
     command = input("Enter command: ") 
@@ -84,7 +86,7 @@ def commands(filename, timestr, path):
         os.system("cd .. && cd archive/ && tree")
     elif command == "drive upload": 
         clear()
-        GoogleDriveUpload(path, timestr) 
+        GoogleDriveUpload(path2, timestr) 
     elif command == "delete": 
         clear() 
         os.system("cd ../archive/ && tree") 
@@ -113,9 +115,10 @@ def main():
     filename = "output.txt" # name of output file 
     timestr = time.strftime("%Y%m%d%H%M%S") # folder name format
     path = "../img/" # path to images folder 
+    path2 = "../archive/"
     clear() 
     while True:
-        commands(filename, timestr, path) # calling the commands() function
+        commands(filename, timestr, path, path2) # calling the commands() function
 
 if __name__ == "__main__":
     main()
