@@ -17,21 +17,22 @@ from pydrive.auth import GoogleAuth
 def clear(): 
     os.system("clear")
 
-def GoogleDriveUpload(path2, timestr): 
+def GoogleDriveUpload(path2, timestr):
     gauth = GoogleAuth()
     gauth.LocalWebserverAuth()
     drive = GoogleDrive(gauth)
-    foldername = os.walk("../archive/").__next__()
-    folder = drive.CreateFile({'title': foldername, 'mimeType':'application/vnd.google-apps.folder'})
-    folder.Upload()
-    cfolder_id = folder['id']
-    os.chdir(path2)
-    for file in glob.glob(""):
-        with open(file, "r") as f: 
-            fn = os.path.basename(f.name)
-            file_drive = drive.CreateFile({'title':fn})    
-        file_drive.SetContentString(f.read())
-        file_drive.Upload()
+    directory = os.listdir(r"../archive/")
+    for foldername in directory: 
+        folder = drive.CreateFile({'title': foldername, 'mimeType':'application/vnd.google-apps.folder'})
+        folder.Upload()
+        cfolder_id = folder['id']
+        os.chdir(path2)
+        for file in glob.glob("*.png"):
+            with open(file, "r") as f: 
+                fn = os.path.basename(f.name)
+                file_drive = drive.CreateFile({'title':fn})    
+            file_drive.SetContentString(f.read())
+            file_drive.Upload()
 
 def imageProcessing(filename, path, timestr, image_name, config):
     fpath = path + image_name  
@@ -59,13 +60,8 @@ def imageProcessing(filename, path, timestr, image_name, config):
     # -- FILE ORGANISATION --
 
     # if changing directory to '/archive' fails, create that directory
-    try:
-        os.chdir("../archive/")
-    except:
-        os.chdir("../") 
-        os.mkdir("archive")
-        os.chdir("archive/")
-        os.mkdir(timestr) 
+    os.chdir("../archive/")
+    os.mkdir(timestr) 
 
     file = open(filename, "w+") # making the text output file
     file.write(text) # writing detected text into output file 
@@ -73,7 +69,7 @@ def imageProcessing(filename, path, timestr, image_name, config):
     # moving the ouptut file to folder created earlier 
     shutil.move(filename, timestr) 
     # copying image used into that folder 
-    os.system("cp " + fpath + " " + timestr) 
+    os.system("cp " + fpath + " " + timestr + "/") 
 
 def commands(filename, timestr, path, path2):
     print("Commands: exit, tree, drive upload, delete, delete all, process.")
