@@ -17,23 +17,6 @@ from pydrive.auth import GoogleAuth
 def clear(): 
     os.system("clear")
     
-def GoogleDriveUpload(timestr):
-    gauth = GoogleAuth()
-    gauth.LocalWebserverAuth()
-    drive = GoogleDrive(gauth)
-    directory = os.listdir(r"../archive/")
-    for foldername in directory: 
-        folder = drive.CreateFile({'title': foldername, 'mimeType' : 'application/vnd.google-apps.folder'})
-        folder.Upload()
-        cfolder_id = folder['id']
-        npath = "../archive/" + foldername 
-        file_list = os.listdir(npath)
-        for file_upload in file_list:
-            npath = "../archive/" + foldername + "/" + file_upload
-            gfile = drive.CreateFile({'title': file_upload, 'parents': foldername})
-            gfile.SetContentFile(npath)
-            gfile.Upload()  
-        
 def imageProcessing(filename, path, timestr, image_name, config):
     fpath = path + image_name  
         
@@ -72,7 +55,7 @@ def imageProcessing(filename, path, timestr, image_name, config):
     os.system("cp " + fpath + " " + timestr + "/") 
 
 def commands(filename, timestr, path):
-    print("Commands: exit, tree, drive upload, delete, delete all, process.")
+    print("Commands: exit, tree, delete, delete all, process.")
 
     command = input("Enter command: ") 
     while command == "": 
@@ -84,9 +67,6 @@ def commands(filename, timestr, path):
     elif command == "tree":
         clear()
         os.system("cd .. && cd archive/ && tree")
-    elif command == "drive upload": 
-        clear()
-        GoogleDriveUpload(timestr) 
     elif command == "delete": 
         clear() 
         os.system("cd ../archive/ && tree") 
@@ -111,7 +91,7 @@ def commands(filename, timestr, path):
         imageProcessing(filename, path, timestr, image_name, config)
 
 def main(): 
-    # -- VARIJABLE -- 
+    # -- VARIABLES -- 
     filename = "output.txt" # name of output file 
     timestr = time.strftime("%Y%m%d%H%M%S") # folder name format
     path = "../img/" # path to images folder 
