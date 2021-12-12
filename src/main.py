@@ -4,6 +4,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pytesseract
+import pymongo 
 import shutil 
 import time 
 import glob
@@ -13,6 +14,8 @@ import os
 from PIL import Image, ImageEnhance
 from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
+from pymongo import MongoClient 
+from datetime import datetime 
 
 def clear(): 
     osCheck = os.uname() 
@@ -21,6 +24,30 @@ def clear():
         os.system("cls")
     elif "Linux" in osCheck: 
         os.system("clear")
+
+def mongoFind(date): 
+    username = "koann-master"
+    password = "Nahbro012"
+    cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&    w=majority")
+    database = cluster["koann!"]
+    collection = database[date]
+    results = collection.find({}) # finding all posts from collection 
+    clear() 
+    for x in results: 
+        print(x["folderName"]) # outputting all folderNames from collection 
+        print(x["imageText"]) # outputting all imageText content from collection 
+
+def mongoDB(timestr, filename, text):   
+    # CHANGE TO MONGODB CREDENTIALS
+    username = "---" 
+    password = "---" 
+    currentDate = time.strftime("%Y%m%d") # setting current date
+    cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+    database = cluster["koann!"] # creating/accessing a cluster/database
+    collection = database[currentDate] # creating/accessing a collection inside the database
+    post = {"folderName": timestr, "imageText": text} # format of data to be uploaded
+    
+    collection.insert_one(post) # uploading data to collection
 
 def imageProcessing(filename, path, timestr, image_name, config):
     fpath = path + image_name  
@@ -58,9 +85,10 @@ def imageProcessing(filename, path, timestr, image_name, config):
     shutil.move(filename, timestr) 
     # copying image used into that folder 
     os.system("cp " + fpath + " " + timestr + "/") 
+    mongoDB(timestr, filename, text) # upload to MongoDB database
 
 def commands(filename, timestr, path):
-    print("Commands: exit, tree, delete, delete all, process.")
+    print("Commands: exit, tree, database find, delete, delete all, process.")
 
     command = input("Enter command: ") 
     while command == "": 
@@ -72,6 +100,12 @@ def commands(filename, timestr, path):
     elif command == "tree":
         clear()
         os.system("cd .. && cd archive/ && tree")
+    elif command == "database find": 
+        clear() 
+        date = input("Date of data to load(format: %Y%m%d): ")
+        while date == "":
+            date = input("Date of data to load(format: %Y%m%d): ")
+        mongoFind(date) 
     elif command == "delete": 
         clear() 
         os.system("cd ../archive/ && tree") 
@@ -98,7 +132,9 @@ def commands(filename, timestr, path):
 def main(): 
     # -- VARIABLES -- 
     filename = "output.txt" # name of output file 
-    timestr = time.strftime("%Y%m%d%H%M%S") # folder name format
+    # timestr = time.strftime("%Y%m%d%H%M%S") # folder name format
+    now = datetime.now()
+    timestr = now.strftime("%d-%m-%y-%H:%M:%S")
     path = "../img/" # path to images folder 
     clear() 
     while True:
