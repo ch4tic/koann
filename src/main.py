@@ -26,8 +26,8 @@ def clear():
         os.system("clear")
 
 def mongoFind(date): 
-    username = "koann-master"
-    password = "Testiranjejeludo012"
+    username = ""
+    password = ""
     cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&    w=majority")
     database = cluster["koann!"]
     collection = database[date]
@@ -39,8 +39,8 @@ def mongoFind(date):
 
 def mongoDB(timestr, filename, text):   
     # CHANGE TO MONGODB CREDENTIALS
-    username = "koann-master" 
-    password = "Testiranjejeludo012" 
+    username = "" 
+    password = "" 
     currentDate = time.strftime("%Y%m%d") # setting current date
     cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     database = cluster["koann!"] # creating/accessing a cluster/database
