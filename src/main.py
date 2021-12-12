@@ -26,8 +26,8 @@ def clear():
         os.system("clear")
 
 def mongoFind(date): 
-    username = "koann-master"
-    password = "Nahbro012"
+    username = "----"
+    password = "----"
     cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&    w=majority")
     database = cluster["koann!"]
     collection = database[date]
