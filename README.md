@@ -10,15 +10,15 @@ Text recognition algorithm implementation using Tesseract.
 
 **Note that you should have the tree command installed on your preffered OS.** 
 
-**You also have some languages we've added in "/lang/" folder**
+**You also have some languages we've added in "/lang/" folder.**
 
-Syntax for Linux Arch(btw I use Arch): ```pacman -S tree``` 
+Syntax for Arch: ```pacman -S tree``` 
 
-Syntax for Linux Debian: ```apt-get install tree```
+Syntax for Debian: ```apt-get install tree```
 
 Syntax for OS X: ```brew install tree```
 
-For Windows ```tree``` is ***already installed***
+For Windows ```tree``` is ***already installed***.
 
 If you feel like you can make a good contribution to the code, feel free to do so :) 
 
