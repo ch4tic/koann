@@ -15,8 +15,13 @@ from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
 
 def clear(): 
-    os.system("clear")
-    
+    osCheck = os.uname() 
+
+    if "Windows" in osCheck: 
+        os.system("cls")
+    elif "Linux" in osCheck: 
+        os.system("clear")
+
 def imageProcessing(filename, path, timestr, image_name, config):
     fpath = path + image_name  
         
