@@ -4,6 +4,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pytesseract
+import getpass
 import pymongo 
 import shutil 
 import time 
@@ -27,7 +28,7 @@ def clear():
 
 def mongoFind(date): 
     username = "koann-master"
-    password = "Testiranjejeludo012"
+    password = getpass.getpass("Password: ")
     cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&    w=majority")
     database = cluster["koann!"]
     collection = database[date]
@@ -40,7 +41,7 @@ def mongoFind(date):
 def mongoDB(timestr, filename, text):   
     # CHANGE TO MONGODB CREDENTIALS
     username = "koann-master" 
-    password = "Testiranjejeludo012" 
+    password = getpass.getpass("Password: ")
     currentDate = time.strftime("%Y%m%d") # setting current date
     cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     database = cluster["koann!"] # creating/accessing a cluster/database
