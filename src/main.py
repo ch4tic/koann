@@ -18,6 +18,7 @@ from pymongo import MongoClient
 from datetime import datetime 
 
 def clear(): 
+    # checking the OS, clearing the screen accordingly
     osCheck = os.uname() 
 
     if "Windows" in osCheck: 
@@ -86,12 +87,30 @@ def imageProcessing(filename, path, timestr, timestr2, image_name, config):
     shutil.move(filename, timestr) 
     # copying image used into that folder 
     os.system("cp " + fpath + " " + timestr + "/") 
-    mongoDB(timestr2, filename, text) # upload to MongoDB database
 
+    # user chooses if he wants to upload files to MongoDB 
+    choice = input("Do you want to upload to MongoDB(Y/n): ")
+    if choice == "": 
+        clear() 
+        print("Uploading to MongoDB...\n")
+        time.sleep(1)
+        mongoDB(timestr2, filename, text)
+    elif choice == "y": 
+        clear()
+        print("Uploading to MongoDB...\n")
+        time.sleep(1)
+        mongoDB(timestr2, filename, text) 
+    elif choice == "n": 
+        clear()
+        print("OK!\n")
+    else: 
+        clear()
+        print("Invalid input!\n")
+    
 def commands(filename, timestr, timestr2, path):
     print("Commands: exit, tree, database find, delete, delete all, process.")
-
     command = input("Enter command: ") 
+
     while command == "": 
         command = input("Enter command: ")
     
