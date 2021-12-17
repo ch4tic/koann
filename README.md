@@ -10,7 +10,9 @@ Text recognition algorithm implementation using Tesseract.
 5. Run the program: ```python3 main.py```
 
 **We've added sample languages in** ``koann/lang/`` **folder!**
+
 **Instructions for installing** ``tree`` **are below!**
+
 ## koann! demo
 https://user-images.githubusercontent.com/66844759/146600585-e8226ae5-da95-4ac5-81a0-d107cda570fc.mp4
 
