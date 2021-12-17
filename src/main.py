@@ -1,9 +1,10 @@
 # Authors: Eman Ćatić i Rijad Gadžo
-# Date: 22.11.1337
+# Date: 1337.12.05
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pytesseract
+import pymongo 
 import shutil 
 import time 
 import glob
@@ -13,6 +14,8 @@ import os
 from PIL import Image, ImageEnhance
 from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
+from pymongo import MongoClient 
+from datetime import datetime 
 
 def clear(): 
     osCheck = os.uname() 
@@ -22,7 +25,31 @@ def clear():
     elif "Linux" in osCheck: 
         os.system("clear")
 
-def imageProcessing(filename, path, timestr, image_name, config):
+def mongoFind(date): 
+    username = "koann-master"
+    password = "---"
+    cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&    w=majority")
+    database = cluster["koann!"]
+    collection = database[date]
+    results = collection.find({}) # finding all posts from collection 
+    clear() 
+    for x in results: 
+        print(x["folderName"]) # outputting all folderNames from collection 
+        print(x["imageText"])  # outputting all imageText content from collection 
+
+def mongoDB(timestr2, filename, text):   
+    # CHANGE TO MONGODB CREDENTIALS
+    username = "koann-master" 
+    password = "---" 
+    currentDate = time.strftime("%Y%m%d") # setting current date
+    cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+    database = cluster["koann!"] # creating/accessing a cluster/database
+    collection = database[currentDate] # creating/accessing a collection inside the database
+    post = {"folderName": timestr2, "imageText": text} # format of data to be uploaded
+    
+    collection.insert_one(post) # uploading data to collection
+
+def imageProcessing(filename, path, timestr, timestr2, image_name, config):
     fpath = path + image_name  
         
     # -- IMAGE PROCESSING -- 
@@ -46,11 +73,12 @@ def imageProcessing(filename, path, timestr, image_name, config):
     print(text) # output the text
 
     # -- FILE ORGANISATION --
-
-    # if changing directory to '/archive' fails, create that directory
+    try: 
+        os.chdir("../archive/")
+    except: 
+        os.mkdir("../archive/")
     os.chdir("../archive/")
-    os.mkdir(timestr) 
-
+    os.mkdir(timestr)
     file = open(filename, "w+") # making the text output file
     file.write(text) # writing detected text into output file 
     file.close() # closing the file 
@@ -58,9 +86,10 @@ def imageProcessing(filename, path, timestr, image_name, config):
     shutil.move(filename, timestr) 
     # copying image used into that folder 
     os.system("cp " + fpath + " " + timestr + "/") 
+    mongoDB(timestr2, filename, text) # upload to MongoDB database
 
-def commands(filename, timestr, path):
-    print("Commands: exit, tree, delete, delete all, process.")
+def commands(filename, timestr, timestr2, path):
+    print("Commands: exit, tree, database find, delete, delete all, process.")
 
     command = input("Enter command: ") 
     while command == "": 
@@ -72,6 +101,12 @@ def commands(filename, timestr, path):
     elif command == "tree":
         clear()
         os.system("cd .. && cd archive/ && tree")
+    elif command == "database find": 
+        clear() 
+        date = input("Date of data to load(format: %Y%m%d): ")
+        while date == "":
+            date = input("Date of data to load(format: %Y%m%d): ")
+        mongoFind(date) 
     elif command == "delete": 
         clear() 
         os.system("cd ../archive/ && tree") 
@@ -93,16 +128,18 @@ def commands(filename, timestr, path):
         image_name = input("Enter image name: ") 
         while image_name == "": 
             image_name = input("Enter image name: ")
-        imageProcessing(filename, path, timestr, image_name, config)
+        imageProcessing(filename, path, timestr, timestr2,image_name, config)
 
 def main(): 
     # -- VARIABLES -- 
     filename = "output.txt" # name of output file 
     timestr = time.strftime("%Y%m%d%H%M%S") # folder name format
+    now = datetime.now()
+    timestr2 = now.strftime("%d-%m-%y-%H:%M:%S")
     path = "../img/" # path to images folder 
     clear() 
     while True:
-        commands(filename, timestr, path) # calling the commands() function
+        commands(filename, timestr, timestr2, path) # calling the commands() function
 
 if __name__ == "__main__":
     main()
