@@ -11,7 +11,7 @@ Text recognition algorithm implementation using Tesseract.
 
 **Note that you should have the tree command installed on your preffered OS.** 
 
-**We've added sample languages in ```koann/lang/``` folder!**
+**We've added sample languages in** ``koann/lang/`` **folder!**
 
 ## koann! demo
 https://user-images.githubusercontent.com/66844759/146600585-e8226ae5-da95-4ac5-81a0-d107cda570fc.mp4
