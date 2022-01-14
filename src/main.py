@@ -11,10 +11,6 @@ import glob
 import sys
 import cv2
 import os
-from PIL import Image, ImageEnhance
-from pydrive.drive import GoogleDrive
-from pydrive.auth import GoogleAuth
-from pymongo import MongoClient 
 from datetime import datetime 
 
 def clear(): 
