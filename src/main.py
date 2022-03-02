@@ -1,5 +1,5 @@
-# Authors: Eman Ćatić i Rijad Gadžo
-# Date: 1337.12.05
+# Author: Eman Ćatić
+# Date: 05.12.1337
 
 import matplotlib.pyplot as plt
 import numpy as np
