@@ -1,4 +1,4 @@
-# Author: Eman Ćatić
+# Author: eman
 # Date: 05.12.1337
 
 import matplotlib.pyplot as plt
