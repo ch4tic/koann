@@ -17,12 +17,12 @@ Note: **If you want MongoDB upload to work, change lines 27 and 28 into your Mon
 ## koann! demo
 https://user-images.githubusercontent.com/66844759/146607600-78b8839d-72d8-400e-bc80-ec3bb2cc28c7.mp4
 
-## Installation of *tree*
-Syntax for Arch: ```pacman -S tree``` 
+## Installation of *tree* and *imagemagick*
+Syntax for Arch: ```pacman -S tree```  ```pacman -S imagemagick```
 
-Syntax for Debian: ```apt-get install tree```
+Syntax for Debian: ```apt-get install tree``` ```apt-get install imagemagick```
 
-Syntax for OS X: ```brew install tree```
+Syntax for OS X: ```brew install tree``` ```brew install imagemagick```
 
 For Windows ```tree``` is ***already installed***.
 
