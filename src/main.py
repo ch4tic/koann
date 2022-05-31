@@ -27,7 +27,7 @@ def clear():
 def mongoFind(date): 
     username = "---"
     password = "---"
-    cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&    w=majority")
+    cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     database = cluster["koann!"]
     collection = database[date]
     results = collection.find({}) # finding all posts from collection 
