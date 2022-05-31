@@ -13,11 +13,9 @@ https://github.com/ch4tic/koann-docker
 4. Use pip to install all modules required (go into ```koann/src/``` and run ```pip install -r requirements.txt```).
 5. Run the program: ```python3 main.py```
 
+Note: **If you want MongoDB upload to work, change lines 27 and 28 into your MongoDB credentials!**
+
 **Guide to creating a MongoDB database:** ***https://www.mongodb.com/basics/create-database***.
-
-**We've added sample languages in** ``koann/lang/`` **folder!**
-
-**Instructions for installing** ``tree`` **are below!**
 
 ## koann! demo
 https://user-images.githubusercontent.com/66844759/146607600-78b8839d-72d8-400e-bc80-ec3bb2cc28c7.mp4
