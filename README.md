@@ -2,6 +2,10 @@
 
 Text recognition algorithm implementation using Tesseract.
 
+**psst, koann is now made into a docker app!**
+
+https://github.com/ch4tic/koann-docker
+
 ## How to install koann! ? 
 1. Git clone the project.
 2. Download languages you'd like to use from: ***https://github.com/tesseract-ocr/tessdata***.
@@ -30,4 +34,4 @@ For Windows ```tree``` is ***already installed***.
 ## Kind regards :)
 If you feel like you can make a good contribution to the code, feel free to do so :) 
 
-Made by: **Eman Ćatić and Rijad Gadžo.**
+Made by: **Eman Ćatić**
