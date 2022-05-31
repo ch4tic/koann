@@ -11,6 +11,7 @@ import glob
 import sys
 import cv2
 import os
+
 from datetime import datetime 
 
 def clear(): 
@@ -70,10 +71,6 @@ def imageProcessing(filename, path, timestr, timestr2, image_name, config):
     print(text) # output the text
 
     # -- FILE ORGANISATION --
-    try: 
-        os.chdir("../archive/")
-    except: 
-        os.mkdir("../archive/")
     os.chdir("../archive/")
     os.mkdir(timestr)
     file = open(filename, "w+") # making the text output file
@@ -114,8 +111,8 @@ def commands(filename, timestr, timestr2, path):
         clear()
         sys.exit()
     elif command == "tree":
-        clear()
-        os.system("cd .. && cd archive/ && tree")
+        clear() 
+        os.system("tree ../archive/")
     elif command == "database find": 
         clear() 
         date = input("Date of data to load(format: %Y%m%d): ")
