@@ -4,3 +4,4 @@ matplotlib
 pytesseract
 pymongo
 datetime
+Pillow

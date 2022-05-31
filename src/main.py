@@ -12,6 +12,7 @@ import sys
 import cv2
 import os
 
+from PIL import Image
 from datetime import datetime 
 
 def clear(): 
@@ -49,7 +50,8 @@ def mongoDB(timestr2, filename, text):
 
 def imageProcessing(filename, path, timestr, timestr2, image_name, config):
     fpath = path + image_name  
-        
+    im = Image.open(fpath)
+
     # -- IMAGE PROCESSING -- 
     image = cv2.imread(fpath) # image load 
     # image scaling to 300 DPI
@@ -69,6 +71,7 @@ def imageProcessing(filename, path, timestr, timestr2, image_name, config):
     # finally using tesseract to recognize text from image
     text = pytesseract.image_to_string(image, config=config)
     print(text) # output the text
+    im.show() 
 
     # -- FILE ORGANISATION --
     os.chdir("../archive/")
