@@ -11,7 +11,8 @@ https://github.com/ch4tic/koann-docker
 2. Download languages you'd like to use from: ***https://github.com/tesseract-ocr/tessdata***.
 3. Move downloaded languages to: ```/usr/share/tesseract-ocr/4.00/tessdata/``` (if on Linux) and ```C:/Program Files/Tesseract-OCR/``` (if on Windows).
 4. Use pip to install all modules required (go into ```koann/src/``` and run ```pip install -r requirements.txt```).
-5. Run the program: ```python3 main.py```
+5. You can add your images to img/ folder or use our samples
+6. Run the program: ```python3 main.py```
 
 Note: **If you want MongoDB upload to work, change lines 27 and 28 into your MongoDB credentials!**
 
