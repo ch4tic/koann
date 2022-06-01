@@ -10,7 +10,7 @@ Text recognition algorithm implementation using Tesseract.
 5. You can add your images to img/ folder or use our samples
 6. Run the program: ```python3 main.py```
 
-Note: **If you want MongoDB upload to work, change variables username and password inside src/.env file**
+Note: **If you want MongoDB upload to work, change variables username and password inside `src/.env` file**
 
 **Guide to creating a MongoDB database:** ***https://www.mongodb.com/basics/create-database***.
 
