@@ -28,5 +28,3 @@ For Windows ```tree``` is ***already installed***.
 
 ## Kind regards :)
 If you feel like you can make a good contribution to the code, feel free to do so :) 
-
-Made by: **Eman Ćatić**
