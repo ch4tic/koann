@@ -14,6 +14,7 @@ import os
 
 from PIL import Image
 from datetime import datetime 
+from dotenv import load_dotenv 
 
 def clear(): 
     # checking the OS, clearing the screen accordingly
@@ -25,8 +26,8 @@ def clear():
         os.system("clear")
 
 def mongoFind(date): 
-    username = "---"
-    password = "---"
+    username = os.getenv("username")
+    password = os.getenv("password")
     cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     database = cluster["koann!"]
     collection = database[date]
@@ -37,9 +38,8 @@ def mongoFind(date):
         print(x["imageText"])  # outputting all imageText content from collection 
 
 def mongoDB(timestr2, filename, text):   
-    # CHANGE TO MONGODB CREDENTIALS
-    username = "---" 
-    password = "---" 
+    username = os.getenv("username") 
+    password = os.getenv("password")
     currentDate = time.strftime("%Y%m%d") # setting current date
     cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     database = cluster["koann!"] # creating/accessing a cluster/database
