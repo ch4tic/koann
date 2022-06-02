@@ -5,3 +5,4 @@ pytesseract
 pymongo
 datetime
 Pillow
+python-dotenv
