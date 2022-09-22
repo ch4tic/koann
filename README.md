@@ -4,6 +4,10 @@ Text recognition algorithm implementation using Tesseract.
 
 ## How to install koann! ? 
 1. Git clone the project.
+2. Install Tesseract on your system
+   - Windows: ***https://github.com/UB-Mannheim/tesseract/wiki***
+   - Debian: ```sudo apt-get install tesseract-ocr```
+   - OS X: ```brew install tesseract```
 2. Download languages you'd like to use from: ***https://github.com/tesseract-ocr/tessdata***.
 3. Move downloaded languages to: ```/usr/share/tesseract-ocr/4.00/tessdata/``` (if on Linux) and ```C:/Program Files/Tesseract-OCR/``` (if on Windows).
 4. Use pip to install all modules required (go into ```koann/src/``` and run ```pip install -r requirements.txt```).
