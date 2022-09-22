@@ -1,6 +1,3 @@
-# Author: eman
-# Date: 05.12.1337
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pytesseract
