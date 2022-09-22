@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pytesseract
+import pyttsx3
 import pymongo 
 import shutil 
 import time 
@@ -48,6 +49,9 @@ def mongoDB(timestr2, filename, text):
 def imageProcessing(filename, path, timestr, timestr2, image_name, config):
     fpath = path + image_name  
     im = Image.open(fpath)
+    
+    speech_engine = pyttsx3.init() # loading pyttsx3 speech engine
+    speech_engine.setProperty("rate", 180) # setting voice speed 
 
     # -- IMAGE PROCESSING -- 
     image = cv2.imread(fpath) # image load 
@@ -82,7 +86,7 @@ def imageProcessing(filename, path, timestr, timestr2, image_name, config):
     os.system("cp " + fpath + " " + timestr + "/") 
 
     # user chooses if he wants to upload files to MongoDB 
-    choice = input("Do you want to upload to MongoDB(Y/n): ")
+    choice = input("Upload to MongoDB(Y/n): ")
     if choice == "": 
         clear() 
         print("Uploading to MongoDB...\n")
@@ -100,6 +104,26 @@ def imageProcessing(filename, path, timestr, timestr2, image_name, config):
         clear()
         print("Invalid input!\n")
     
+    # AUDIO OUTPUT OF OCR METRICS
+    """
+    choice = input("Audio output OCR metrics(Y/n): ")
+
+    if choice == "":
+        clear()
+        print("Listen carefully!\n")
+        speech.say(metrics)
+    elif choice == "y":
+        clear()
+        print("Listen carefully!\n")
+        speech.say(metrics)
+    elif choice == "n":
+        clear()
+        print("OK!\n")
+    else:
+        clear()
+        print("Invalid input!\n")
+    """
+
 def commands(filename, timestr, timestr2, path):
     print("Commands: exit, tree, database find, delete, delete all, process.")
     command = input("Enter command: ") 
