@@ -158,6 +158,7 @@ def commands(filename, timestr, timestr2, path):
         print("All folders/files succesfully removed!")
         os.chdir("../")
         os.mkdir("archive")
+        os.chdir("src/")
     elif command == "process": 
         clear()
         os.chdir(path) 
