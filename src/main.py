@@ -132,6 +132,8 @@ def commands(filename, timestr, timestr2, path):
         clear()
         shutil.rmtree("../archive") # deleting all files including the folder
         print("All folders/files succesfully removed!")
+        os.chdir("../")
+        os.mkdir("archive")
     elif command == "process": 
         clear()
         os.chdir(path) 
