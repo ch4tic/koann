@@ -27,7 +27,7 @@ def mongoFind(date):
     username = os.getenv("username")
     password = os.getenv("password")
     cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-    database = cluster["koann!"]
+    database = cluster[os.getenv("dbName")]
     collection = database[date]
     results = collection.find({}) # finding all posts from collection 
     clear() 
@@ -40,7 +40,7 @@ def mongoDB(timestr2, filename, text):
     password = os.getenv("password")
     currentDate = time.strftime("%Y%m%d") # setting current date
     cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-    database = cluster["koann!"] # creating/accessing a cluster/database
+    database = cluster[os.getenv("dbName")] # creating/accessing a cluster/database
     collection = database[currentDate] # creating/accessing a collection inside the database
     post = {"folderName": timestr2, "imageText": text} # format of data to be uploaded
     

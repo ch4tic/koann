@@ -2,6 +2,8 @@
 
 Text recognition algorithm implementation using Tesseract.
 
+***There is a bug in the code that doesn't allow for MongoDB upload - fix in progress!***
+
 ## How to install koann! ? 
 1. Git clone the project.
 2. Install **Tesseract** on your system
@@ -14,7 +16,7 @@ Text recognition algorithm implementation using Tesseract.
 5. You can add your images to img/ folder or use our samples
 6. Run the program: ```python3 main.py```
 
-Note: **If you want MongoDB upload to work, change variables username and password inside `src/.env` file**
+Note: **If you want MongoDB upload to work, change variables `username`, `password` and `dbName` inside `src/.env` file**
 
 **Guide to creating a MongoDB database:** ***https://www.mongodb.com/basics/create-database***.
 
