@@ -12,6 +12,7 @@ import os
 from PIL import Image
 from datetime import datetime 
 from dotenv import load_dotenv 
+from pymongo import MongoClient
 
 def clear(): 
     # checking the OS, clearing the screen accordingly
@@ -23,10 +24,9 @@ def clear():
         os.system("clear")
 
 def mongoFind(date): 
-    username = os.getenv("username")
-    password = os.getenv("password")
-    cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-    database = cluster[os.getenv("dbName")]
+    load_dotenv()
+    cluster = MongoClient(os.getenv("DB_URI"))
+    database = cluster["koann"]
     collection = database[date]
     results = collection.find({}) # finding all posts from collection 
     clear() 
@@ -35,11 +35,10 @@ def mongoFind(date):
         print(x["imageText"])  # outputting all imageText content from collection 
 
 def mongoDB(timestr2, filename, text):   
-    username = os.getenv("username") 
-    password = os.getenv("password")
+    load_dotenv()
     currentDate = time.strftime("%Y%m%d") # setting current date
-    cluster = MongoClient("mongodb+srv://" + username + ":" + password + "@koann.mxcaq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-    database = cluster[os.getenv("dbName")] # creating/accessing a cluster/database
+    cluster = MongoClient(os.getenv("DB_URI"))
+    database = cluster["koann"] # creating/accessing a cluster/database
     collection = database[currentDate] # creating/accessing a collection inside the database
     post = {"folderName": timestr2, "imageText": text} # format of data to be uploaded
     
@@ -48,9 +47,6 @@ def mongoDB(timestr2, filename, text):
 def imageProcessing(filename, path, timestr, timestr2, image_name, config):
     fpath = path + image_name  
     im = Image.open(fpath)
-    
-    speech_engine = pyttsx3.init() # loading pyttsx3 speech engine
-    speech_engine.setProperty("rate", 180) # setting voice speed 
 
     # -- IMAGE PROCESSING -- 
     image = cv2.imread(fpath) # image load 

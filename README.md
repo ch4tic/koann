@@ -2,8 +2,6 @@
 
 Text recognition algorithm implementation using Tesseract.
 
-***There is a bug in the code that doesn't allow for MongoDB upload - fix in progress!***
-
 ## How to install koann! ? 
 1. Git clone the project.
 2. Install **Tesseract** on your system
