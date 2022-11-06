@@ -26,7 +26,7 @@ def clear():
 def mongoFind(date): 
     load_dotenv()
     cluster = MongoClient(os.getenv("DB_URI"))
-    database = cluster["koann"]
+    database = cluster[os.getenv("DB_NAME")]
     collection = database[date]
     results = collection.find({}) # finding all posts from collection 
     clear() 
@@ -38,7 +38,7 @@ def mongoDB(timestr2, filename, text):
     load_dotenv()
     currentDate = time.strftime("%Y%m%d") # setting current date
     cluster = MongoClient(os.getenv("DB_URI"))
-    database = cluster["koann"] # creating/accessing a cluster/database
+    database = cluster[os.getenv("DB_NAME")] # creating/accessing a cluster/database
     collection = database[currentDate] # creating/accessing a collection inside the database
     post = {"folderName": timestr2, "imageText": text} # format of data to be uploaded
     
@@ -129,7 +129,7 @@ def commands(filename, timestr, timestr2, path):
         print("Folder removed succesfully!")
     elif command == "delete all": 
         clear()
-        shutil.rmtree("../archive") # deleting all files including the folder
+        shutil.rmtree("../archive") # deleting all files
         print("All folders/files succesfully removed!")
         os.chdir("../")
         os.mkdir("archive")
