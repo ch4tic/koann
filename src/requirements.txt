@@ -1,8 +1,9 @@
 numpy
 opencv-python
-matplotlib
 pytesseract
 pymongo
 datetime
 Pillow
 python-dotenv
+textblob
+argparse

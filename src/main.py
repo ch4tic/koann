@@ -1,6 +1,6 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import pytesseract
+import argparse 
 import pymongo 
 import shutil 
 import time 
@@ -11,23 +11,22 @@ import os
 
 from PIL import Image
 from datetime import datetime 
+from textblob import TextBlob
 from dotenv import load_dotenv 
 from pymongo import MongoClient
 
 def clear(): 
     # checking the OS, clearing the screen accordingly
-    osCheck = os.uname() 
-
-    if "Windows" in osCheck: 
+    if "Windows" in os.uname(): 
         os.system("cls")
-    elif "Linux" in osCheck: 
+    elif "Linux" in os.uname(): 
         os.system("clear")
 
 def mongoFind(date): 
-    load_dotenv()
-    cluster = MongoClient(os.getenv("DB_URI"))
-    database = cluster[os.getenv("DB_NAME")]
-    collection = database[date]
+    load_dotenv() # loading .env file 
+    cluster = MongoClient(os.getenv("DB_URI")) 
+    database = cluster[os.getenv("DB_NAME")] # accessing a cluster/db 
+    collection = database[date] # accessing a collection in db
     results = collection.find({}) # finding all posts from collection 
     clear() 
     for x in results: 
@@ -35,11 +34,11 @@ def mongoFind(date):
         print(x["imageText"])  # outputting all imageText content from collection 
 
 def mongoDB(timestr2, filename, text):   
-    load_dotenv()
+    load_dotenv() # loading .env file 
     currentDate = time.strftime("%Y%m%d") # setting current date
-    cluster = MongoClient(os.getenv("DB_URI"))
-    database = cluster[os.getenv("DB_NAME")] # creating/accessing a cluster/database
-    collection = database[currentDate] # creating/accessing a collection inside the database
+    cluster = MongoClient(os.getenv("DB_URI")) 
+    database = cluster[os.getenv("DB_NAME")] # creating/accessing a cluster/db 
+    collection = database[currentDate] # creating/accessing a collection in db 
     post = {"folderName": timestr2, "imageText": text} # format of data to be uploaded
     
     collection.insert_one(post) # uploading data to collection
@@ -50,23 +49,33 @@ def imageProcessing(filename, path, timestr, timestr2, image_name, config):
 
     # -- IMAGE PROCESSING -- 
     image = cv2.imread(fpath) # image load 
+
+    # normalizing the picture 
+    normalize_image = np.zeros((image.shape[0], image.shape[1]))
+    imager = cv2.normalize(image, normalize_image, 0, 255, cv2.NORM_MINMAX)
+    
     # image scaling to 300 DPI
     image = cv2.resize(image, None, fx=1.5, fy=1.5, interpolation=cv2.INTER_CUBIC) 
     # image convert to grayscale
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) 
 
-    # blurring the image using median blur method 
-    kernel = np.ones((1, 1), np.uint8)
+    # blurring image and applying a median filter for edge smoothening 
+    image = cv2.resize(image, (400, 400))
+    kernel = np.ones((1,1), np.uint8)
     image = cv2.dilate(image, kernel, iterations=1)
     image = cv2.erode(image, kernel, iterations=1)
-    cv2.threshold(cv2.medianBlur(image, 3), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-    cv2.adaptiveThreshold(cv2.medianBlur(image, 3), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 2)
-    
+    image = cv2.GaussianBlur(image, (5,5), 0)
+    image = cv2.medianBlur(image,5)
+    image = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     # loading the processed image 
     image = cv2.imread(fpath, cv2.COLOR_BGR2GRAY) 
     # finally using tesseract to recognize text from image
     text = pytesseract.image_to_string(image, config=config)
-    print(text) # output the text
+
+    # spellchecking using TextBlob - for better results 
+    tb = TextBlob(text)
+    corrected_text = tb.correct()
+    print(corrected_text) # output the text
     im.show() 
 
     # -- FILE ORGANISATION --
