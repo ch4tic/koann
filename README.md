@@ -23,7 +23,8 @@ Be sure to change `<username>` and `<password>` variables!
 **Guide to creating a MongoDB database:** ***https://www.mongodb.com/basics/create-database***.
 
 ## koann! demo
-https://user-images.githubusercontent.com/66844759/146607600-78b8839d-72d8-400e-bc80-ec3bb2cc28c7.mp4
+
+https://user-images.githubusercontent.com/66844759/200172458-2e3dadff-53fc-4350-b18f-9b5268493822.mp4
 
 ## Installation of *tree* and *imagemagick*
 Syntax for Arch: ```pacman -S tree```  ```pacman -S imagemagick```
