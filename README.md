@@ -16,6 +16,7 @@ OCR algorithm implementation using Tesseract - supports images and pdf documents
 6. Run the program: ```python3 main.py```
 
 Note: **If you want MongoDB upload to work, change variable `DB_URI` inside `src/.env` file to the database connect link in MongoDB!**
+
 Example: `mongodb+srv://<username>:<password>@koann.ptkxpuh.mongodb.net/?retryWrites=true&w=majority` 
           
 Be sure to change `<username>` and `<password>` variables!
