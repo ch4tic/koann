@@ -7,3 +7,5 @@ Pillow
 python-dotenv
 textblob
 argparse
+pdf2image
+wand
