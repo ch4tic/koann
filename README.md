@@ -32,6 +32,8 @@ Syntax for Arch: ```pacman -S tree```  ```pacman -S imagemagick```
 
 Syntax for Debian: ```apt-get install tree``` ```apt-get install imagemagick```
 
+Syntax for Fedora/RedHat: ```dnf install ImageMagick-devel``` or ```yum install ImageMagick-devel```
+
 Syntax for OS X: ```brew install tree``` ```brew install imagemagick```
 
 For Windows ```tree``` is ***already installed***.
