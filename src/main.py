@@ -44,8 +44,13 @@ def mongoDB(timestr2, filename, text):
     collection.insert_one(post) # uploading data to collection
 
 def imageProcessing(filename, path, timestr, timestr2, image_name, config):
-    fpath = path + image_name  
-    im = Image.open(fpath)
+    # global variables for other functions
+    global fpath
+    global corrected_text
+    global text 
+
+    fpath = path + image_name # full path to image 
+    im = Image.open(fpath) # opening image 
 
     # -- IMAGE PROCESSING -- 
     image = cv2.imread(fpath) # image load 
@@ -55,37 +60,43 @@ def imageProcessing(filename, path, timestr, timestr2, image_name, config):
     imager = cv2.normalize(image, normalize_image, 0, 255, cv2.NORM_MINMAX)
     
     # image scaling to 300 DPI
-    image = cv2.resize(image, None, fx=1.5, fy=1.5, interpolation=cv2.INTER_CUBIC) 
+    image = cv2.resize(image, None, fx=1.2, fy=1.2, interpolation=cv2.INTER_CUBIC)  
     # image convert to grayscale
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) 
 
-    # blurring image and applying a median filter for edge smoothening 
     image = cv2.resize(image, (400, 400))
     kernel = np.ones((1,1), np.uint8)
     image = cv2.dilate(image, kernel, iterations=1)
     image = cv2.erode(image, kernel, iterations=1)
-    image = cv2.GaussianBlur(image, (5,5), 0)
-    image = cv2.medianBlur(image,5)
+
+    # blurring image and applying a median filter for edge smoothening 
+    image = cv2.threshold(cv2.medianBlur(image, 3), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    image = cv2.adaptiveThreshold(cv2.bilateralFilter(image, 9, 75, 75), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 2) 
     image = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+
     # loading the processed image 
     image = cv2.imread(fpath, cv2.COLOR_BGR2GRAY) 
+    
     # finally using tesseract to recognize text from image
     text = pytesseract.image_to_string(image, config=config)
 
     # spellchecking using TextBlob - for better results 
     tb = TextBlob(text)
     corrected_text = tb.correct()
-    print(corrected_text) # output the text
-    im.show() 
 
-    # -- FILE ORGANISATION --
-    os.chdir("../archive/")
-    os.mkdir(timestr)
+    print(corrected_text) # output the text
+    im.show() # showing image 
+
+def fileOrganisation(filename, timestr, timestr2, text, fpath, corrected_text): 
+    os.chdir("../archive/") # changing directory to archive
+    os.mkdir(timestr) # making a folder for storing OCR data - according to current time and date
     file = open(filename, "w+") # making the text output file
-    file.write(text) # writing detected text into output file 
+    file.write(str(corrected_text)) # writing detected text into output file 
     file.close() # closing the file 
+
     # moving the ouptut file to folder created earlier 
     shutil.move(filename, timestr) 
+
     # copying image used into that folder 
     os.system("cp " + fpath + " " + timestr + "/") 
 
@@ -152,6 +163,7 @@ def commands(filename, timestr, timestr2, path):
         while image_name == "": 
             image_name = input("Enter image name: ")
         imageProcessing(filename, path, timestr, timestr2,image_name, config)
+        fileOrganisation(filename, timestr, timestr2, text, fpath, corrected_text)
 
 def main(): 
     # -- VARIABLES -- 
