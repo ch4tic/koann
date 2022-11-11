@@ -1,6 +1,6 @@
 # project koann!
 
-Text recognition algorithm implementation using Tesseract.
+OCR algorithm implementation using Tesseract - supports images and pdf documents!
 
 ## How to install koann! ? 
 1. Git clone the project.
@@ -16,6 +16,7 @@ Text recognition algorithm implementation using Tesseract.
 6. Run the program: ```python3 main.py```
 
 Note: **If you want MongoDB upload to work, change variable `DB_URI` inside `src/.env` file to the database connect link in MongoDB!**
+
 Example: `mongodb+srv://<username>:<password>@koann.ptkxpuh.mongodb.net/?retryWrites=true&w=majority` 
           
 Be sure to change `<username>` and `<password>` variables!
@@ -30,6 +31,8 @@ https://user-images.githubusercontent.com/66844759/200172458-2e3dadff-53fc-4350-
 Syntax for Arch: ```pacman -S tree```  ```pacman -S imagemagick```
 
 Syntax for Debian: ```apt-get install tree``` ```apt-get install imagemagick```
+
+Syntax for Fedora/RedHat: ```dnf install ImageMagick-devel``` or ```yum install ImageMagick-devel```
 
 Syntax for OS X: ```brew install tree``` ```brew install imagemagick```
 
