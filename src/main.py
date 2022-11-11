@@ -1,5 +1,6 @@
 import numpy as np
 import pytesseract
+import webbrowser
 import argparse 
 import pymongo 
 import shutil 
@@ -107,6 +108,7 @@ def pdfProcessing(filename, path_pdf, timestr, timestr2, pdf_name, config):
         image = Image.open(io.BytesIO(blob))
         text_pdf = pytesseract.image_to_string(image, config=config)
 
+    webbrowser.open_new(fpath2)
     print(text_pdf)    
 
 def fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text): 
