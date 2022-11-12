@@ -56,12 +56,11 @@ def imageProcessing(path_image, image_name, config):
     fpath = path_image + image_name # full path to image 
     im = Image.open(fpath) # opening image 
 
-    # -- IMAGE PROCESSING -- 
     image = cv2.imread(fpath) # image load 
-
+    
     # normalizing the picture 
     normalize_image = np.zeros((image.shape[0], image.shape[1]))
-    imager = cv2.normalize(image, normalize_image, 0, 255, cv2.NORM_MINMAX)
+    image = cv2.normalize(image, normalize_image, 0, 255, cv2.NORM_MINMAX)
     
     # image scaling to 300 DPI
     image = cv2.resize(image, None, fx=1.2, fy=1.2, interpolation=cv2.INTER_CUBIC)  
@@ -83,7 +82,7 @@ def imageProcessing(path_image, image_name, config):
     
     # finally using tesseract to recognize text from image
     text = pytesseract.image_to_string(image, config=config)
-
+    
     # spellchecking using TextBlob - for better results 
     tb = TextBlob(text)
     corrected_text = tb.correct()
@@ -98,17 +97,16 @@ def pdfProcessing(filename, path_pdf, timestr, timestr2, pdf_name, config):
     fpath2 = path_pdf + pdf_name
     imageBlobs = []
     pdf_name = wi(filename=fpath2, resolution=300)
-    image = pdf_name.convert('jpeg')
+
+    # converting .pdf pages into images 
+    image = pdf_name.convert('jpeg') 
 
     for img in image.sequence:
         imgPage = wi(image = img)
         imageBlobs.append(imgPage.make_blob('jpeg'))
-
-    for blob in imageBlobs:
-        image = Image.open(io.BytesIO(blob))
-        text_pdf = pytesseract.image_to_string(image, config=config)
-
-    webbrowser.open_new(fpath2)
+        text_pdf = pytesseract.image_to_string(image, config=config) # OCR - image to text
+    
+    webbrowser.open_new(fpath2) # opening pdf file in web browser 
     print(text_pdf)    
 
 def fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text): 
@@ -122,7 +120,7 @@ def fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text):
     shutil.move(filename, timestr) 
 
     # copying image used into that folder 
-    os.system("cp " + fpath + " " + timestr + "/") 
+    os.system("cp ../" + fpath + " " + timestr + "/") 
 
     # user chooses if he wants to upload files to MongoDB 
     choice = input("Upload to MongoDB(Y/n): ")
