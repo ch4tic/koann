@@ -13,6 +13,7 @@ OCR algorithm implementation using Tesseract - supports images and pdf documents
 3. Move downloaded languages to: ```/usr/share/tesseract-ocr/4.00/tessdata/``` (if on Linux) and ```C:/Program Files/Tesseract-OCR/``` (if on Windows).
 4. Use pip to install all modules required (go into ```koann/src/``` and run ```pip install -r requirements.txt```).
 5. You can add your images to img/ folder or use our samples
+   - Also be sure to edit .env file and specify the absolute path to the koann/ folder!
 6. Run the program: ```python3 main.py```
 
 Note: **If you want MongoDB upload to work, change variable `DB_URI` inside `src/.env` file to the database connect link in MongoDB!**
