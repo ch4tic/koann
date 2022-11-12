@@ -90,28 +90,34 @@ def imageProcessing(path_image, image_name, config):
     print(corrected_text) # output the text
     im.show() # showing image 
 
-def pdfProcessing(filename, path_pdf, timestr, timestr2, pdf_name, config):
+def pdfProcessing(path_pdf, pdf_name, config):
     global fpath2 
     global text_pdf
 
-    fpath2 = path_pdf + pdf_name
     imageBlobs = []
-    pdf_name = wi(filename=fpath2, resolution=300)
+    fpath2 = path_pdf + pdf_name
+    pdf = wi(filename=fpath2, resolution=300)
 
     # converting .pdf pages into images 
-    image = pdf_name.convert('jpeg') 
+    image = pdf.convert('jpeg') 
 
     for img in image.sequence:
         imgPage = wi(image = img)
         imageBlobs.append(imgPage.make_blob('jpeg'))
+    
+    for imgBlob in imageBlobs: 
+        image = Image.open(io.BytesIO(imgBlob))
         text_pdf = pytesseract.image_to_string(image, config=config) # OCR - image to text
     
     webbrowser.open_new(fpath2) # opening pdf file in web browser 
-    print(text_pdf)    
+    print(text_pdf)  
 
-def fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text): 
-    os.chdir("../archive/images") # changing directory to archive/images
-    os.mkdir(timestr) # making a folder for storing OCR data - according to current time and date
+def fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text, absolute_path): 
+    try: 
+        os.chdir(absolute_path + "/archive/images/") # changing directory to archive/pdfs
+    except: 
+        os.mkdir(absolute_path + "/archive/images")
+    os.mkdir(absolute_path + "/archive/images/" + timestr) # making a folder for storing OCR data - according to current time and date
     file = open(filename, "w+") # making the text output file
     file.write(str(corrected_text)) # writing detected text into output file 
     file.close() # closing the file 
@@ -120,7 +126,7 @@ def fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text):
     shutil.move(filename, timestr) 
 
     # copying image used into that folder 
-    os.system("cp ../" + fpath + " " + timestr + "/") 
+    os.system("cp " + fpath + " " + absolute_path + "/archive/images/" + timestr + "/") 
 
     # user chooses if he wants to upload files to MongoDB 
     choice = input("Upload to MongoDB(Y/n): ")
@@ -141,8 +147,11 @@ def fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text):
         clear()
         print("Invalid input!\n")
 
-def fileOrganisationPDF(filename, timestr, timestr2, fpath2, text_pdf): 
-    os.chdir("../archive/pdfs") # changing directory to archive/pdfs
+def fileOrganisationPDF(filename, timestr, timestr2, fpath2, text_pdf, absolute_path): 
+    try: 
+        os.chdir(absolute_path + "/archive/pdfs/") # changing directory to archive/pdfs
+    except: 
+        os.mkdir(absolute_path + "/archive/pdfs")
     os.mkdir(timestr) # making a folder for storing OCR data - according to current time and date
     file = open(filename, "w+") # making the text output file
     file.write(str(text_pdf)) # writing detected text into output file 
@@ -152,7 +161,7 @@ def fileOrganisationPDF(filename, timestr, timestr2, fpath2, text_pdf):
     shutil.move(filename, timestr) 
 
     # copying image used into that folder 
-    os.system("cp ../" + fpath2 + " " + timestr + "/") 
+    os.system("cp " + fpath2 + " " + timestr + "/") 
 
     # user chooses if he wants to upload files to MongoDB 
     choice = input("Upload to MongoDB(Y/n): ")
@@ -173,8 +182,27 @@ def fileOrganisationPDF(filename, timestr, timestr2, fpath2, text_pdf):
         clear()
         print("Invalid input!\n")
 
+def removeImage(absolute_path):
+    os.system("cd " + absolute_path + "/archive/images/ && tree")
+    ftd = input("Name of folder to remove: ") 
+    while ftd == "":
+        ftd = input("Name of folder to remove: ")
+        
+    os.chdir(absolute_path + "/archive/images/")
+    shutil.rmtree(ftd) # folder delete 
+    print("Folder removed succesfully!")
 
-def commands(filename, timestr, timestr2, path_image, path_pdf):
+def removePDF(absolute_path): 
+    os.system("cd " + absolute_path + "/archive/pdfs/ && tree")
+    ftd = input("Name of folder to remove: ") 
+    while ftd == "":
+        ftd = input("Name of folder to remove: ")
+        
+    os.chdir(absolute_path + "/archive/pdfs/")
+    shutil.rmtree(ftd) # folder delete 
+    print("Folder removed succesfully!")
+
+def commands(filename, timestr, timestr2, path_image, path_pdf, absolute_path):
     print("Commands: exit, tree, database find, delete, delete all, process.")
     command = input("Enter command: ") 
 
@@ -187,7 +215,7 @@ def commands(filename, timestr, timestr2, path_image, path_pdf):
     
     elif command == "tree":
         clear() 
-        os.system("tree ../archive/")
+        os.system("tree " + absolute_path)
     
     elif command == "database find": 
         clear() 
@@ -198,21 +226,23 @@ def commands(filename, timestr, timestr2, path_image, path_pdf):
     
     elif command == "delete": 
         clear() 
-        os.system("cd ../archive/ && tree") 
-        ftd = input("Name of folder to remove: ") 
-        while ftd == "":
-            ftd = input("Name of folder to remove: ")
-        os.chdir("../archive/") 
-        shutil.rmtree(ftd) # folder delete 
-        print("Folder removed succesfully!")
+        what_folder = input("Do you want to remove image or pdf folders: ")
+        while what_folder == "": 
+            what_folder = input("Do you want to remove image or pdf folders: ")
+        if what_folder == "img" or "image": 
+            removeImage(absolute_path)
+        elif what_folder == "pdf": 
+            removePDF(absolute_path)
+        else: 
+            print("Invalid input!")
     
     elif command == "delete all": 
         clear()
-        shutil.rmtree("../archive") # deleting all files
+        shutil.rmtree(absolute_path + "/archive/images/") # deleting all files
+        shutil.rmtree(absolute_path + "/archive/pdfs/") # deleting all files
+        #os.mkdir(absolute_path + "/archive/images") # creating images folder 
+        #os.mkdir(absolute_path + "/archive/pdfs") # creating pdfs folder 
         print("All folders/files succesfully removed!")
-        os.chdir("../")
-        os.mkdir("archive")
-        os.chdir("src/")
     
     elif command == "process": 
         clear()
@@ -228,27 +258,30 @@ def commands(filename, timestr, timestr2, path_image, path_pdf):
             while image_name == "": 
                 image_name = input("Enter image name: ")
             imageProcessing(path_image, image_name, config)
-            fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text)
+            fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text, absolute_path)
         elif t_file == "pdf": 
             lang = input("Enter desired language(bos, srp, hrv, eng, deu, fra): ")
             config = ('-l ' + lang + ' --oem 1 --psm 3') # config for tesseract
             pdf_name = input("Enter pdf name: ")
             while pdf_name == "": 
-                pdf_name = input("Enter image name: ")
-            pdfProcessing(filename, path_pdf, timestr, timestr2, pdf_name, config)
-            fileOrganisationPDF(filename, timestr, timestr2, fpath2, text_pdf)
+                pdf_name = input("Enter pdf name: ")
+            pdfProcessing(path_pdf, pdf_name, config)
+            fileOrganisationPDF(filename, timestr, timestr2, fpath2, text_pdf, absolute_path)
 
 def main(): 
+    load_dotenv() # loading .env file 
     # -- VARIABLES -- 
     filename = "output.txt" # name of output file 
     timestr = time.strftime("%Y%m%d%H%M%S") # folder name format
     now = datetime.now()
-    timestr2 = now.strftime("%d-%m-%y-%H:%M:%S")
-    path_image = "../img/" # path to images folder 
-    path_pdf = "../pdf/" # path to pdf folder 
+    timestr2 = now.strftime("%d-%m-%y-%H:%M:%S") 
+    absolute_path = os.getenv("ABSOLUTE_PATH")  
+    path_image = absolute_path + "/img/" # path to images folder 
+    path_pdf = absolute_path + "/pdf/" # path to pdf folder 
+
     clear() 
     while True:
-        commands(filename, timestr, timestr2, path_image, path_pdf) # calling the commands() function
+        commands(filename, timestr, timestr2, path_image, path_pdf, absolute_path) # calling the commands() function
 
 if __name__ == "__main__":
     main()
