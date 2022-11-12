@@ -92,7 +92,7 @@ def imageProcessing(path_image, image_name, config):
 
 def pdfProcessing(path_pdf, pdf_name, config):
     global fpath2 
-    global text_pdf
+    global corrected_text 
 
     imageBlobs = []
     fpath2 = path_pdf + pdf_name
@@ -109,24 +109,26 @@ def pdfProcessing(path_pdf, pdf_name, config):
         image = Image.open(io.BytesIO(imgBlob))
         text_pdf = pytesseract.image_to_string(image, config=config) # OCR - image to text
     
+    # spellchecking using TextBlob - for better results 
+    tb = TextBlob(text_pdf)
+    corrected_text = tb.correct()
+
     webbrowser.open_new(fpath2) # opening pdf file in web browser 
-    print(text_pdf)  
+    print(corrected_text) # output the text
 
 def fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text, absolute_path): 
     try: 
-        os.chdir(absolute_path + "/archive/images/") # changing directory to archive/pdfs
+        os.chdir(absolute_path + "archive/images/") # changing directory to archive/pdfs
     except: 
-        os.mkdir(absolute_path + "/archive/images")
-    os.mkdir(absolute_path + "/archive/images/" + timestr) # making a folder for storing OCR data - according to current time and date
+        os.mkdir(absolute_path + "archive/images")
+    os.mkdir(absolute_path + "archive/images/" + timestr) # making a folder for storing OCR data - according to current time and date
+    os.chdir(absolute_path + "archive/images/" + timestr)
     file = open(filename, "w+") # making the text output file
     file.write(str(corrected_text)) # writing detected text into output file 
     file.close() # closing the file 
 
-    # moving the output file to folder created earlier 
-    shutil.move(filename, timestr) 
-
     # copying image used into that folder 
-    os.system("cp " + fpath + " " + absolute_path + "/archive/images/" + timestr + "/") 
+    os.system("cp " + fpath + " " + absolute_path + "archive/images/" + timestr + "/") 
 
     # user chooses if he wants to upload files to MongoDB 
     choice = input("Upload to MongoDB(Y/n): ")
@@ -147,21 +149,19 @@ def fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text, ab
         clear()
         print("Invalid input!\n")
 
-def fileOrganisationPDF(filename, timestr, timestr2, fpath2, text_pdf, absolute_path): 
+def fileOrganisationPDF(filename, timestr, timestr2, fpath2, corrected_text, absolute_path): 
     try: 
-        os.chdir(absolute_path + "/archive/pdfs/") # changing directory to archive/pdfs
+        os.chdir(absolute_path + "archive/pdfs/") # changing directory to archive/pdfs
     except: 
-        os.mkdir(absolute_path + "/archive/pdfs")
-    os.mkdir(timestr) # making a folder for storing OCR data - according to current time and date
+        os.mkdir(absolute_path + "archive/pdfs")
+    os.mkdir(absolute_path + "archive/pdfs/" + timestr) # making a folder for storing OCR data - according to current time and date
+    os.chdir(absolute_path + "archive/pdfs/" + timestr)
     file = open(filename, "w+") # making the text output file
-    file.write(str(text_pdf)) # writing detected text into output file 
+    file.write(str(corrected_text)) # writing detected text into output file 
     file.close() # closing the file 
 
-    # moving the output file to folder created earlier 
-    shutil.move(filename, timestr) 
-
     # copying image used into that folder 
-    os.system("cp " + fpath2 + " " + timestr + "/") 
+    os.system("cp " + fpath2 + " " + absolute_path + "archive/pdfs/" + timestr + "/") 
 
     # user chooses if he wants to upload files to MongoDB 
     choice = input("Upload to MongoDB(Y/n): ")
@@ -266,7 +266,7 @@ def commands(filename, timestr, timestr2, path_image, path_pdf, absolute_path):
             while pdf_name == "": 
                 pdf_name = input("Enter pdf name: ")
             pdfProcessing(path_pdf, pdf_name, config)
-            fileOrganisationPDF(filename, timestr, timestr2, fpath2, text_pdf, absolute_path)
+            fileOrganisationPDF(filename, timestr, timestr2, fpath2, corrected_text, absolute_path)
 
 def main(): 
     load_dotenv() # loading .env file 
