@@ -5,6 +5,7 @@ import webbrowser
 import argparse 
 import pymongo 
 import shutil 
+import json
 import time 
 import glob
 import sys
@@ -171,12 +172,12 @@ def fileOrganisationPDF(filename, timestr, timestr2, fpath2, corrected_text, abs
         clear() 
         print("Uploading to MongoDB...\n")
         time.sleep(1)
-        mongoDB(timestr2, filename, text_pdf)
+        mongoDB(timestr2, filename, corrected_text)
     elif choice == "y": 
         clear()
         print("Uploading to MongoDB...\n")
         time.sleep(1)
-        mongoDB(timestr2, filename, text_pdf) 
+        mongoDB(timestr2, filename, corrected_text) 
     elif choice == "n": 
         clear()
         print("OK!\n")
@@ -269,7 +270,7 @@ def commands(filename, timestr, timestr2, path_image, path_pdf, absolute_path):
 def main(): 
     load_dotenv() # loading .env file 
     # -- VARIABLES -- 
-    filename = "output.txt" # name of output file 
+    filename = "output.json" # name of output file 
     timestr = time.strftime("%Y%m%d%H%M%S") # folder name format
     now = datetime.now()
     timestr2 = now.strftime("%d-%m-%y-%H:%M:%S") 
