@@ -1,6 +1,5 @@
 numpy
 opencv-python
-pytesseract
 pymongo
 datetime
 Pillow
@@ -9,3 +8,4 @@ textblob
 argparse
 pdf2image
 wand
+tesserocr

@@ -1,3 +1,4 @@
+# importing modules 
 import numpy as np
 import pytesseract
 import webbrowser
@@ -79,10 +80,10 @@ def imageProcessing(path_image, image_name, config):
 
     # loading the processed image 
     image = cv2.imread(fpath, cv2.COLOR_BGR2GRAY) 
-    
+        
     # finally using tesseract to recognize text from image
     text = pytesseract.image_to_string(image, config=config)
-    
+
     # spellchecking using TextBlob - for better results 
     tb = TextBlob(text)
     corrected_text = tb.correct()
@@ -107,6 +108,7 @@ def pdfProcessing(path_pdf, pdf_name, config):
     
     for imgBlob in imageBlobs: 
         image = Image.open(io.BytesIO(imgBlob))
+        #finally using tesseract to recognize text from image
         text_pdf = pytesseract.image_to_string(image, config=config) # OCR - image to text
     
     # spellchecking using TextBlob - for better results 
@@ -238,10 +240,8 @@ def commands(filename, timestr, timestr2, path_image, path_pdf, absolute_path):
     
     elif command == "delete all": 
         clear()
-        shutil.rmtree(absolute_path + "/archive/images/") # deleting all files
-        shutil.rmtree(absolute_path + "/archive/pdfs/") # deleting all files
-        #os.mkdir(absolute_path + "/archive/images") # creating images folder 
-        #os.mkdir(absolute_path + "/archive/pdfs") # creating pdfs folder 
+        shutil.rmtree(absolute_path + "archive/images/") # deleting all files
+        shutil.rmtree(absolute_path + "archive/pdfs/") # deleting all files
         print("All folders/files succesfully removed!")
     
     elif command == "process": 
@@ -252,16 +252,14 @@ def commands(filename, timestr, timestr2, path_image, path_pdf, absolute_path):
         
         if t_file == "img": 
             os.chdir(path_image)
-            lang = input("Enter desired language(bos, srp, hrv, eng, deu, fra): ")
-            config = ('-l ' + lang + ' --oem 1 --psm 3') # config for tesseract
+            config = input("Enter desired language(bos, srp, hrv, eng, deu, fra): ")
             image_name = input("Enter image name: ") 
             while image_name == "": 
                 image_name = input("Enter image name: ")
             imageProcessing(path_image, image_name, config)
             fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text, absolute_path)
         elif t_file == "pdf": 
-            lang = input("Enter desired language(bos, srp, hrv, eng, deu, fra): ")
-            config = ('-l ' + lang + ' --oem 1 --psm 3') # config for tesseract
+            config = input("Enter desired language(bos, srp, hrv, eng, deu, fra): ")
             pdf_name = input("Enter pdf name: ")
             while pdf_name == "": 
                 pdf_name = input("Enter pdf name: ")
