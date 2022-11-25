@@ -119,15 +119,18 @@ def pdfProcessing(path_pdf, pdf_name, config):
     webbrowser.open_new(fpath2) # opening pdf file in web browser 
     print(corrected_text) # output the text
 
-def fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text, absolute_path): 
+def fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text, absolute_path, image_name): 
     try: 
         os.chdir(absolute_path + "archive/images/") # changing directory to archive/pdfs
     except: 
         os.mkdir(absolute_path + "archive/images")
     os.mkdir(absolute_path + "archive/images/" + timestr) # making a folder for storing OCR data - according to current time and date
-    os.chdir(absolute_path + "archive/images/" + timestr)
+    os.chdir(absolute_path + "archive/images/" + timestr) # changing current folder to the new one
+    # json output format 
+    json_pdf = {"filename": image_name, "file_type": "image", "output_text": str(corrected_text)}
+    json_object = json.dumps(json_pdf, indent=4) # converting to object 
     file = open(filename, "w+") # making the text output file
-    file.write(str(corrected_text)) # writing detected text into output file 
+    file.write(json_object) # writing detected text into output file 
     file.close() # closing the file 
 
     # copying image used into that folder 
@@ -152,15 +155,18 @@ def fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text, ab
         clear()
         print("Invalid input!\n")
 
-def fileOrganisationPDF(filename, timestr, timestr2, fpath2, corrected_text, absolute_path): 
+def fileOrganisationPDF(filename, timestr, timestr2, fpath2, corrected_text, absolute_path, pdf_name): 
     try: 
         os.chdir(absolute_path + "archive/pdfs/") # changing directory to archive/pdfs
     except: 
         os.mkdir(absolute_path + "archive/pdfs")
     os.mkdir(absolute_path + "archive/pdfs/" + timestr) # making a folder for storing OCR data - according to current time and date
-    os.chdir(absolute_path + "archive/pdfs/" + timestr)
+    os.chdir(absolute_path + "archive/pdfs/" + timestr) # changing current folder to the new one 
+    # json output format 
+    json_pdf = {"filename": pdf_name, "file_type": "pdf", "output_text": str(corrected_text)}
+    json_object = json.dumps(json_pdf) # converting to object 
     file = open(filename, "w+") # making the text output file
-    file.write(str(corrected_text)) # writing detected text into output file 
+    file.write(json_object) # writing detected text into output file 
     file.close() # closing the file 
 
     # copying image used into that folder 
@@ -258,14 +264,14 @@ def commands(filename, timestr, timestr2, path_image, path_pdf, absolute_path):
             while image_name == "": 
                 image_name = input("Enter image name: ")
             imageProcessing(path_image, image_name, config)
-            fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text, absolute_path)
+            fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text, absolute_path, image_name)
         elif t_file == "pdf": 
             config = input("Enter desired language(bos, srp, hrv, eng, deu, fra): ")
             pdf_name = input("Enter pdf name: ")
             while pdf_name == "": 
                 pdf_name = input("Enter pdf name: ")
             pdfProcessing(path_pdf, pdf_name, config)
-            fileOrganisationPDF(filename, timestr, timestr2, fpath2, corrected_text, absolute_path)
+            fileOrganisationPDF(filename, timestr, timestr2, fpath2, corrected_text, absolute_path, pdf_name)
 
 def main(): 
     load_dotenv() # loading .env file 
