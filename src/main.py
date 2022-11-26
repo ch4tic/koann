@@ -28,7 +28,7 @@ def clear():
     elif "Linux" in os.uname(): 
         os.system("clear")
 
-def mongoFind(date): 
+def mongoFind(date, file_type): 
     load_dotenv() # loading .env file 
     cluster = MongoClient(os.getenv("DB_URI")) 
     database = cluster[os.getenv("DB_NAME")] # accessing a cluster/db 
@@ -37,18 +37,17 @@ def mongoFind(date):
     clear() 
     for x in results: 
         print(x["folderName"]) # outputting all folderNames from collection 
-        print(x["imageText"])  # outputting all imageText content from collection 
+        print(x[file_type])  # outputting all imageText content from collection 
 
-def mongoDB(timestr2, filename, text):   
+def mongoDB(timestr2, corrected_text, file_type):   
     load_dotenv() # loading .env file 
     currentDate = time.strftime("%Y%m%d") # setting current date
     cluster = MongoClient(os.getenv("DB_URI")) 
     database = cluster[os.getenv("DB_NAME")] # creating/accessing a cluster/db 
     collection = database[currentDate] # creating/accessing a collection in db 
-    post = {"folderName": timestr2, "imageText": text} # format of data to be uploaded
-    
+    post = {"folder_name": timestr2, "file_type": file_type, "output": str(corrected_text)} # format of data to be uploadedfile_type        
     collection.insert_one(post) # uploading data to collection
-
+ 
 def imageProcessing(path_image, image_name, config):
     # global variables for other functions
     global fpath
@@ -120,6 +119,7 @@ def pdfProcessing(path_pdf, pdf_name, config):
     print(corrected_text) # output the text
 
 def fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text, absolute_path, image_name): 
+    file_type = "image"
     try: 
         os.chdir(absolute_path + "archive/images/") # changing directory to archive/pdfs
     except: 
@@ -142,12 +142,12 @@ def fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text, ab
         clear() 
         print("Uploading to MongoDB...\n")
         time.sleep(1)
-        mongoDB(timestr2, filename, corrected_text)
+        mongoDB(timestr2, corrected_text, file_type)
     elif choice == "y": 
         clear()
         print("Uploading to MongoDB...\n")
         time.sleep(1)
-        mongoDB(timestr2, filename, corrected_text) 
+        mongoDB(timestr2, corrected_text, file_type) 
     elif choice == "n": 
         clear()
         print("OK!\n")
@@ -156,6 +156,7 @@ def fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text, ab
         print("Invalid input!\n")
 
 def fileOrganisationPDF(filename, timestr, timestr2, fpath2, corrected_text, absolute_path, pdf_name): 
+    file_type = "pdf"
     try: 
         os.chdir(absolute_path + "archive/pdfs/") # changing directory to archive/pdfs
     except: 
@@ -178,12 +179,12 @@ def fileOrganisationPDF(filename, timestr, timestr2, fpath2, corrected_text, abs
         clear() 
         print("Uploading to MongoDB...\n")
         time.sleep(1)
-        mongoDB(timestr2, filename, corrected_text)
+        mongoDB(timestr2, corrected_text, file_type)
     elif choice == "y": 
         clear()
         print("Uploading to MongoDB...\n")
         time.sleep(1)
-        mongoDB(timestr2, filename, corrected_text) 
+        mongoDB(timestr2, corrected_text, file_type) 
     elif choice == "n": 
         clear()
         print("OK!\n")
