@@ -1,6 +1,8 @@
-# project koann!
-
-OCR algorithm implementation using Tesseract - supports images and pdf documents!
+<h1 align="center">koann!</h1>
+<p align="center">
+   <img src="https://user-images.githubusercontent.com/66844759/204110762-5cabf46a-e67a-4872-a1fd-002f7398f8b9.jpg" width="300" height="300">
+</p>
+<h2 align="center">OCR algorithm implementation using Tesseract</h2>
 
 ## How to install koann! ? 
 1. Git clone the project.
