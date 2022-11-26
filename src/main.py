@@ -47,7 +47,7 @@ def mongoDB(timestr2, corrected_text, file_type):
     collection = database[currentDate] # creating/accessing a collection in db 
     post = {"folder_name": timestr2, "file_type": file_type, "output": str(corrected_text)} # format of data to be uploadedfile_type        
     collection.insert_one(post) # uploading data to collection
- 
+    
 def imageProcessing(path_image, image_name, config):
     # global variables for other functions
     global fpath
@@ -143,11 +143,13 @@ def fileOrganisationImage(filename, timestr, timestr2, fpath, corrected_text, ab
         print("Uploading to MongoDB...\n")
         time.sleep(1)
         mongoDB(timestr2, corrected_text, file_type)
+        print("Data uploaded successfully!")
     elif choice == "y": 
         clear()
         print("Uploading to MongoDB...\n")
         time.sleep(1)
         mongoDB(timestr2, corrected_text, file_type) 
+        print("Data uploaded successfully!")
     elif choice == "n": 
         clear()
         print("OK!\n")
@@ -180,11 +182,13 @@ def fileOrganisationPDF(filename, timestr, timestr2, fpath2, corrected_text, abs
         print("Uploading to MongoDB...\n")
         time.sleep(1)
         mongoDB(timestr2, corrected_text, file_type)
+        print("Data uploaded successfully!")
     elif choice == "y": 
         clear()
         print("Uploading to MongoDB...\n")
         time.sleep(1)
         mongoDB(timestr2, corrected_text, file_type) 
+        print("Data uploaded successfully!")
     elif choice == "n": 
         clear()
         print("OK!\n")
@@ -276,14 +280,13 @@ def commands(filename, timestr, timestr2, path_image, path_pdf, absolute_path):
 
 def main(): 
     load_dotenv() # loading .env file 
-    # -- VARIABLES -- 
     filename = "output.json" # name of output file 
     timestr = time.strftime("%Y%m%d%H%M%S") # folder name format
     now = datetime.now()
     timestr2 = now.strftime("%d-%m-%y-%H:%M:%S") 
     absolute_path = os.getenv("ABSOLUTE_PATH")  
-    path_image = absolute_path + "/img/" # path to images folder 
-    path_pdf = absolute_path + "/pdf/" # path to pdf folder 
+    path_image = str(absolute_path) + "img/" # path to images folder 
+    path_pdf = str(absolute_path) + "pdf/" # path to pdf folder 
 
     clear() 
     while True:
